@@ -25,3 +25,10 @@ Thin end-to-end slice. First step: a ground-truth set (about 50 synthetic messag
 
 ## Tomorrow
 Evals before features: write the eval script against labels.json, then the classify/draft slice.
+
+## Update (same day): redoing the labels myself
+Asked whether it was better to label by hand; decided yes. Moved the AI's labels to `data/labels.ai.json` (kept in git, `labeled_by: "ai"`) so they don't anchor me, and I'm labeling `data/labels.json` from scratch with `npm run label`. `npm run label:compare` will report my agreement with the AI, and each disagreement goes in the notes below.
+
+- Human labels done: (fill in N/51)
+- Intent agreement with AI: (fill in)
+- Disagreements and why: (fill in)

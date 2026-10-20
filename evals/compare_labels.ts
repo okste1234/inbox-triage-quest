@@ -1,17 +1,28 @@
-// After you've labeled: how often did you disagree with the AI's own idea of each message's intent?
-// Disagreements are log material: they show where the taxonomy or the AI-generated data is fuzzy.
-import { readFileSync } from "node:fs";
+// Your labels (data/labels.json) vs the AI's (data/labels.ai.json).
+// Every disagreement is log material: it shows where the taxonomy or my first-pass labels were fuzzy.
+import { existsSync, readFileSync } from "node:fs";
 import { LabelSchema, MessageSchema } from "../src/schema.js";
 import { z } from "zod";
 
-const messages = z.array(MessageSchema).parse(JSON.parse(readFileSync("data/sample_messages.json", "utf8")));
-const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync("data/labels.json", "utf8")));
-const guess = JSON.parse(readFileSync("data/.ai_guess_labels.json", "utf8")) as Record<string, { intent: string }>;
+const read = <T extends z.ZodTypeAny>(path: string, schema: T): z.infer<T>[] =>
+  existsSync(path) ? z.array(schema).parse(JSON.parse(readFileSync(path, "utf8"))) : [];
 
+const messages = read("data/sample_messages.json", MessageSchema);
+const mine = read("data/labels.json", LabelSchema);
+const ai = new Map(read("data/labels.ai.json", LabelSchema).map((l) => [l.id, l]));
 const byId = new Map(messages.map((m) => [m.id, m]));
-const diffs = labels.filter((l) => guess[l.id]?.intent !== l.intent);
 
-console.log(`Labeled ${labels.length}/${messages.length}. You disagreed with the AI on ${diffs.length}.\n`);
-for (const l of diffs) {
-  console.log(`${l.id}  you=${l.intent}  ai=${guess[l.id]?.intent}\n  "${byId.get(l.id)?.body}"\n`);
+const intentDiffs = mine.filter((l) => ai.get(l.id)?.intent !== l.intent);
+const humanDiffs = mine.filter((l) => ai.get(l.id)?.needs_human !== l.needs_human);
+
+console.log(`You labeled ${mine.length}/${messages.length}.`);
+console.log(`Intent agreement with AI: ${mine.length - intentDiffs.length}/${mine.length}`);
+console.log(`needs_human agreement with AI: ${mine.length - humanDiffs.length}/${mine.length}\n`);
+
+for (const l of intentDiffs) {
+  const a = ai.get(l.id);
+  console.log(`${l.id}  you=${l.intent}  ai=${a?.intent}\n  "${byId.get(l.id)?.body}"\n  ai note: ${a?.notes || "-"}\n`);
+}
+for (const l of humanDiffs) {
+  console.log(`${l.id}  needs_human: you=${l.needs_human}  ai=${ai.get(l.id)?.needs_human}`);
 }

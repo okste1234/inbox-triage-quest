@@ -120,7 +120,7 @@
     "id": "m014",
     "intent": "scheduling",
     "secondary_intents": [],
-    "needs_human": false,
+    "needs_human": true,
     "ideal_reply": "Great to hear from you. I'll send you the details for booking the next round shortly.",
     "notes": "",
     "labeled_by": "ai"
