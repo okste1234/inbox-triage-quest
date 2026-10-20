@@ -1,0 +1,472 @@
+[
+  {
+    "id": "m001",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for checking in. We will get back to you shortly once there's an update or news from the hiring team",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m002",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m003",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m004",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m005",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m006",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m007",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m008",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m009",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m010",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m011",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m012",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m013",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Could be application_problem; chose scheduling because the ask is the calendar invite",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m014",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m015",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Must not promise a new date",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m016",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m017",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Same-day: a human must act now",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m018",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m019",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Taxonomy gap: late-arrival notice fits no intent well. Time-critical, human must relay immediately",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m020",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Must not promise a new date",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m021",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m022",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Reply must not state a number or range",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m023",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m024",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thank you for being upfront. I can't discuss compensation in this message, so I've passed your note to the recruiter who will follow up.",
+    "notes": "Negotiation: must not match or counter. Human required",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m025",
+    "intent": "compensation_question",
+    "secondary_intents": [
+      "status_check",
+      "other"
+    ],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Remote/hours are not compensation. Taxonomy gap; closest fit",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m026",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m027",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Must not confirm or deny a bonus",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m028",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thank you for your message. I've passed your request to the recruiter, who will follow up with you about the written offer.",
+    "notes": "Offer terms: human must handle; draft must not confirm any amount",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m029",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m030",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m031",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m032",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Fixing records is an action a human must take",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m033",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Must not promise a new deadline",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m034",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m035",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m036",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry for the repeated disruption, and I understand your frustration. I've raised this with the team and someone will follow up with you.",
+    "notes": "The urgency and constant cancelling calls for attention.",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m037",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m038",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Must not promise a new date",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m039",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Must not confirm or deny what the job ad said",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m040",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry your experience felt this way. I've shared your feedback with the team, and thank you for the time you invested.",
+    "notes": "Must not promise feedback. Sincerely apologise for the bad experience",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m041",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Possible discrimination issue: human only, escalate. Draft should be minimal",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m042",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m043",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Must not promise to keep the CV on file or to contact them",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m044",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m045",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Sending an address is a human decision",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m046",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Auto-reply; no reply needed. Ideal outcome is ignoring it",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m047",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m048",
+    "intent": "scheduling",
+    "secondary_intents": [
+      "compensation_question",
+      "application_problem"
+    ],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Three intents in one message: human must split",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m049",
+    "intent": "status_check",
+    "secondary_intents": [
+      "complaint"
+    ],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m050",
+    "intent": "scheduling",
+    "secondary_intents": [
+      "compensation_question",
+      "other"
+    ],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "Offer negotiation and resumption date: human only",
+    "labeled_by": "human"
+  },
+  {
+    "id": "m051",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Ambiguous: no content, simply shows no intents.",
+    "labeled_by": "human"
+  }
+]

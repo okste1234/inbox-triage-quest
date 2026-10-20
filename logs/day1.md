@@ -29,6 +29,21 @@ Evals before features: write the eval script against labels.json, then the class
 ## Update (same day): redoing the labels myself
 Asked whether it was better to label by hand; decided yes. Moved the AI's labels to `data/labels.ai.json` (kept in git, `labeled_by: "ai"`) so they don't anchor me, and I'm labeling `data/labels.json` from scratch with `npm run label`. `npm run label:compare` will report my agreement with the AI, and each disagreement goes in the notes below.
 
-- Human labels done: (fill in N/51)
-- Intent agreement with AI: (fill in)
-- Disagreements and why: (fill in)
+- Human labels done: 51/51 (23 with notes, 7 with an ideal reply; the rest of the replies are left for later).
+- Intent agreement with AI: **50/51**. `needs_human` agreement: **46/51**.
+- I fixed 4 mechanical errors in my own file afterwards: ideal_reply for m032 and m043 held note text instead of a reply (blanked), and stray leading quote marks on m027 (note) and m028 (reply).
+
+### Disagreements (1 intent, 5 needs_human)
+| id | message | me | AI | What it shows |
+|---|---|---|---|---|
+| m050 | "Can I start in two months... flexibility on the base pay?" | scheduling | compensation_question | Genuine multi-intent. Both of us listed the other intent as secondary and both set needs_human=true, so the outcome in the tool is the same. The eval must not treat this as a plain miss. |
+| m014 | "Happy to proceed... how do I book a slot?" | needs_human=no | yes | AI over-escalated a routine message. |
+| m015 | "Conflict on Wednesday... move it to next week?" | yes | no | Rescheduling needs a human to act on the calendar, but a safe draft is easy. |
+| m045 | "Send me your postal address" | yes | no | The AI's own note said "a human decision" but it set no, so the AI contradicted itself. My label is the consistent one. |
+| m038 | "Told Friday, now Wednesday, nobody replied" | no | yes | I escalated the other five complaints but not this one. Mild complaint or not? I need a rule. |
+| m051 | "Hello" | no | yes | directive.md says empty messages go to a human; "Hello" is not empty but has no request. |
+
+**What the five needs_human disagreements have in common:** `needs_human` has two meanings that I never separated. (a) "The draft can't be trusted" and (b) "a person must take an action (calendar, address, records)". m015 and m045 are (b); m014, m038 and m051 are about how risky the message feels. Next step: decide one meaning and write it into `directive.md` (v2) before the Day 2 eval, otherwise the eval measures noise.
+
+### Independence caveat (be honest here)
+The 50/51 figure is **not** strong evidence that the taxonomy is clear. Several of my notes and ideal replies are word-for-word identical to the AI's (for example the notes on m015, m020, m033, m038, m039, m041, m043 and the ideal replies on m024 and m036). That is only possible if I read `labels.ai.json` or the earlier output while labeling. [Edit this line to say what actually happened: did you look at the AI labels? When? How much did it influence you?] Until that is answered, treat my labels as "reviewed AI labels", not as independent ground truth. Day 2 evals will report this.
