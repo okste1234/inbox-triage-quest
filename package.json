@@ -1,0 +1,25 @@
+{
+  "name": "inbox-triage-quest",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Groups candidate messages by intent and drafts replies for human review. Never sends.",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "review": "tsx src/review.ts",
+    "test": "vitest run",
+    "eval": "tsx evals/run_evals.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "dotenv": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}
