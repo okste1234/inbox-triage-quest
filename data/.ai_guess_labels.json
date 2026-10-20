@@ -1,0 +1,213 @@
+{
+  "m001": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m002": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m003": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m004": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m005": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m006": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m007": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m008": {
+    "intent": "status_check",
+    "also": []
+  },
+  "m009": {
+    "intent": "scheduling",
+    "also": []
+  },
+  "m010": {
+    "intent": "scheduling",
+    "also": []
+  },
+  "m011": {
+    "intent": "scheduling",
+    "also": []
+  },
+  "m012": {
+    "intent": "scheduling",
+    "also": []
+  },
+  "m013": {
+    "intent": "scheduling",
+    "also": []
+  },
+  "m014": {
+    "intent": "scheduling",
+    "also": []
+  },
+  "m015": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m016": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m017": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m018": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m019": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m020": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m021": {
+    "intent": "reschedule_or_withdraw",
+    "also": []
+  },
+  "m022": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m023": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m024": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m025": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m026": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m027": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m028": {
+    "intent": "compensation_question",
+    "also": []
+  },
+  "m029": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m030": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m031": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m032": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m033": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m034": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m035": {
+    "intent": "application_problem",
+    "also": []
+  },
+  "m036": {
+    "intent": "complaint",
+    "also": []
+  },
+  "m037": {
+    "intent": "complaint",
+    "also": []
+  },
+  "m038": {
+    "intent": "complaint",
+    "also": []
+  },
+  "m039": {
+    "intent": "complaint",
+    "also": []
+  },
+  "m040": {
+    "intent": "complaint",
+    "also": []
+  },
+  "m041": {
+    "intent": "complaint",
+    "also": []
+  },
+  "m042": {
+    "intent": "other",
+    "also": []
+  },
+  "m043": {
+    "intent": "other",
+    "also": []
+  },
+  "m044": {
+    "intent": "other",
+    "also": []
+  },
+  "m045": {
+    "intent": "other",
+    "also": []
+  },
+  "m046": {
+    "intent": "other",
+    "also": []
+  },
+  "m047": {
+    "intent": "other",
+    "also": []
+  },
+  "m048": {
+    "intent": "scheduling",
+    "also": [
+      "compensation_question",
+      "application_problem"
+    ]
+  },
+  "m049": {
+    "intent": "status_check",
+    "also": [
+      "complaint"
+    ]
+  },
+  "m050": {
+    "intent": "compensation_question",
+    "also": [
+      "scheduling"
+    ]
+  },
+  "m051": {
+    "intent": "other",
+    "also": []
+  }
+}

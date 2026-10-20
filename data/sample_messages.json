@@ -1,0 +1,359 @@
+[
+  {
+    "id": "m001",
+    "from_name": "Amara Okafor",
+    "from_email": "amara.okafor@example.com",
+    "subject": "Re: Data Analyst interview",
+    "body": "Hi, I interviewed last Tuesday with Dana and haven't heard anything since. Is there any update on where things stand? Thanks!"
+  },
+  {
+    "id": "m002",
+    "from_name": "Liam Chen",
+    "from_email": "liam.chen@example.com",
+    "subject": "Application follow up",
+    "body": "Good morning. I submitted my application for the Data Analyst position about three weeks ago and wanted to check on its status. Kind regards, Liam"
+  },
+  {
+    "id": "m003",
+    "from_name": "Tolu Adeyemi",
+    "from_email": "tolu.adeyemi@example.com",
+    "subject": "Backend Engineer role",
+    "body": "Hello, is the Backend Engineer role still open? I applied in March and have not heard back since the confirmation."
+  },
+  {
+    "id": "m004",
+    "from_name": "Sofia Marin",
+    "from_email": "sofia.marin@example.com",
+    "subject": "Waiting on decision",
+    "body": "Good afternoon, I was told I would hear a decision within a week of my final interview and it has now been 10 days. Could you tell me where I am in the process?"
+  },
+  {
+    "id": "m005",
+    "from_name": "Ben Walker",
+    "from_email": "ben.walker@example.com",
+    "subject": "take-home",
+    "body": "quick one - did you get my take-home submission? i never got a confirmation so just checking"
+  },
+  {
+    "id": "m006",
+    "from_name": "Priya Nair",
+    "from_email": "priya.nair@example.com",
+    "subject": "After final round",
+    "body": "Hey! Just checking in after the final round last week. Still really excited about the role. Any news?"
+  },
+  {
+    "id": "m007",
+    "from_name": "Chidi Eze",
+    "from_email": "chidi.eze@example.com",
+    "subject": "Under review?",
+    "body": "I got an automated email saying my application was 'under review' two weeks ago. Is that still the case or has something changed?"
+  },
+  {
+    "id": "m008",
+    "from_name": "Mark Evans",
+    "from_email": "mark.evans@example.com",
+    "subject": "update pls",
+    "body": "any update on my application? thanks"
+  },
+  {
+    "id": "m009",
+    "from_name": "Hannah Müller",
+    "from_email": "hannah.m.ller@example.com",
+    "subject": "Re: Phone screen invitation",
+    "body": "Thanks for reaching out! I'm free Thursday or Friday afternoon for the phone screen. What would work on your side?"
+  },
+  {
+    "id": "m010",
+    "from_name": "Jide Bakare",
+    "from_email": "jide.bakare@example.com",
+    "subject": "Interview timing",
+    "body": "Can we do the interview on a weekend? I work weekdays at my current job and can't easily get time off."
+  },
+  {
+    "id": "m011",
+    "from_name": "Elena Rossi",
+    "from_email": "elena.rossi@example.com",
+    "subject": "Interview format",
+    "body": "Is the interview on Zoom or in person? And roughly how long will it run? I want to plan my day."
+  },
+  {
+    "id": "m012",
+    "from_name": "Kemi Alade",
+    "from_email": "kemi.alade@example.com",
+    "subject": "Time zone",
+    "body": "I'm based in Lagos (WAT). Could you send interview times that work for that time zone? Thank you."
+  },
+  {
+    "id": "m013",
+    "from_name": "Daniel Park",
+    "from_email": "daniel.park@example.com",
+    "subject": "Panel interview invite",
+    "body": "Please send the calendar invite for the panel interview. I did not receive anything in my inbox, not even in spam."
+  },
+  {
+    "id": "m014",
+    "from_name": "Grace Mensah",
+    "from_email": "grace.mensah@example.com",
+    "subject": "Next round",
+    "body": "Happy to proceed to the next round! How do I go about booking a slot?"
+  },
+  {
+    "id": "m015",
+    "from_name": "Oscar Lindqvist",
+    "from_email": "oscar.lindqvist@example.com",
+    "subject": "Wednesday interview",
+    "body": "I have a conflict on Wednesday and won't be able to make the interview. Could we move it to sometime next week?"
+  },
+  {
+    "id": "m016",
+    "from_name": "Fatima Bello",
+    "from_email": "fatima.bello@example.com",
+    "subject": "Withdrawing my application",
+    "body": "I need to withdraw my application as I have accepted another offer. Thank you for your time and consideration."
+  },
+  {
+    "id": "m017",
+    "from_name": "Noah Griffin",
+    "from_email": "noah.griffin@example.com",
+    "subject": "TODAY 3pm",
+    "body": "so sorry, family emergency and I can't make the 3pm today. can we rebook please"
+  },
+  {
+    "id": "m018",
+    "from_name": "Ifeoma Nwosu",
+    "from_email": "ifeoma.nwosu@example.com",
+    "subject": "Please remove me",
+    "body": "Please remove me from consideration for the role. Thanks for your time."
+  },
+  {
+    "id": "m019",
+    "from_name": "Carlos Vega",
+    "from_email": "carlos.vega@example.com",
+    "subject": "running late!!",
+    "body": "Hi, running about 15 min late to the interview, traffic is terrible. Please tell the panel, so sorry"
+  },
+  {
+    "id": "m020",
+    "from_name": "Yuki Tanaka",
+    "from_email": "yuki.tanaka@example.com",
+    "subject": "Technical round",
+    "body": "My availability has changed. I'd need to push the technical round back by about a week if that's possible."
+  },
+  {
+    "id": "m021",
+    "from_name": "Samuel Ojo",
+    "from_email": "samuel.ojo@example.com",
+    "subject": "Role details",
+    "body": "After reading more I see the role is fully onsite, which doesn't work for me. I'd like to withdraw."
+  },
+  {
+    "id": "m022",
+    "from_name": "Nadia Haddad",
+    "from_email": "nadia.haddad@example.com",
+    "subject": "Salary range",
+    "body": "What is the salary range for this role?"
+  },
+  {
+    "id": "m023",
+    "from_name": "Peter Novak",
+    "from_email": "peter.novak@example.com",
+    "subject": "Benefits",
+    "body": "Does the position include health insurance and a pension contribution? Couldn't find it in the job ad."
+  },
+  {
+    "id": "m024",
+    "from_name": "Aisha Khan",
+    "from_email": "aisha.khan@example.com",
+    "subject": "Expectations",
+    "body": "I'm currently at $85k. Would you be able to match that or go above it? Want to be upfront before we go further."
+  },
+  {
+    "id": "m025",
+    "from_name": "Tomas Silva",
+    "from_email": "tomas.silva@example.com",
+    "subject": "Remote and benefits",
+    "body": "Is the role remote? And what are the working hours and benefits like?"
+  },
+  {
+    "id": "m026",
+    "from_name": "Zainab Yusuf",
+    "from_email": "zainab.yusuf@example.com",
+    "subject": "Compensation band",
+    "body": "Before further steps, could you share the compensation band? I don't want to waste anyone's time."
+  },
+  {
+    "id": "m027",
+    "from_name": "Ryan O'Neill",
+    "from_email": "ryan.o.neill@example.com",
+    "subject": "Signing bonus",
+    "body": "Is there a signing bonus or relocation package for this position?"
+  },
+  {
+    "id": "m028",
+    "from_name": "Mei Lin",
+    "from_email": "mei.lin@example.com",
+    "subject": "Offer letter",
+    "body": "Thank you for the verbal offer. Could you confirm the offer amount in writing so I can review it?"
+  },
+  {
+    "id": "m029",
+    "from_name": "Ola Johansson",
+    "from_email": "ola.johansson@example.com",
+    "subject": "Portal error",
+    "body": "The portal gives me an error 500 every time I try to upload my CV. I've tried three browsers."
+  },
+  {
+    "id": "m030",
+    "from_name": "Beatrice Kamau",
+    "from_email": "beatrice.kamau@example.com",
+    "subject": "Wrong resume",
+    "body": "I accidentally uploaded the wrong resume to my application. Can I replace it?"
+  },
+  {
+    "id": "m031",
+    "from_name": "Victor Hugo Ramos",
+    "from_email": "victor.hugo.ramos@example.com",
+    "subject": "No confirmation",
+    "body": "I applied two days ago and never got a confirmation email. Did my application go through?"
+  },
+  {
+    "id": "m032",
+    "from_name": "Anita Desai",
+    "from_email": "anita.desai@example.com",
+    "subject": "Profile errors",
+    "body": "My name is misspelled in my profile (it should be Desai, not Desi) and my phone number is wrong. How do I fix these?"
+  },
+  {
+    "id": "m033",
+    "from_name": "Kwame Asante",
+    "from_email": "kwame.asante@example.com",
+    "subject": "Assessment link",
+    "body": "The assessment link in your email says it has expired but I never got to open it. Can you send a new one?"
+  },
+  {
+    "id": "m034",
+    "from_name": "Lena Fischer",
+    "from_email": "lena.fischer@example.com",
+    "subject": "Duplicate application",
+    "body": "I applied twice by mistake for the same role. Could you delete the duplicate?"
+  },
+  {
+    "id": "m035",
+    "from_name": "Ahmed Rahman",
+    "from_email": "ahmed.rahman@example.com",
+    "subject": "Cover letter missing",
+    "body": "My cover letter did not attach when I applied. How can I send it now?"
+  },
+  {
+    "id": "m036",
+    "from_name": "Jordan Blake",
+    "from_email": "jordan.blake@example.com",
+    "subject": "Cancelled again",
+    "body": "This is the THIRD time my interview has been cancelled at the last minute. That is really unprofessional and I'm losing patience."
+  },
+  {
+    "id": "m037",
+    "from_name": "Sandra Cole",
+    "from_email": "sandra.cole@example.com",
+    "subject": "Interview experience",
+    "body": "Your interviewer joined 40 minutes late and was dismissive when I raised it. I expect a response to this."
+  },
+  {
+    "id": "m038",
+    "from_name": "Emeka Obi",
+    "from_email": "emeka.obi@example.com",
+    "subject": "Promised Friday",
+    "body": "I was told I would hear back on Friday. It's now Wednesday and nobody has said a word. Candidates' time matters too."
+  },
+  {
+    "id": "m039",
+    "from_name": "Clara Dubois",
+    "from_email": "clara.dubois@example.com",
+    "subject": "Misleading ad",
+    "body": "Your job ad said the role was remote but the recruiter told me it's onsite 4 days a week. That is misleading."
+  },
+  {
+    "id": "m040",
+    "from_name": "Terrence Moore",
+    "from_email": "terrence.moore@example.com",
+    "subject": "Feedback",
+    "body": "I was rejected after five rounds with no feedback whatsoever. Very disappointed with how this was handled."
+  },
+  {
+    "id": "m041",
+    "from_name": "Rhea Kapoor",
+    "from_email": "rhea.kapoor@example.com",
+    "subject": "Interview question",
+    "body": "Why was I asked about my marital status and plans for children in my interview? I found that inappropriate and I want this looked at."
+  },
+  {
+    "id": "m042",
+    "from_name": "Isabella Costa",
+    "from_email": "isabella.costa@example.com",
+    "subject": "Thank you",
+    "body": "Thank you for the opportunity. It was great meeting the team!"
+  },
+  {
+    "id": "m043",
+    "from_name": "Hassan Ali",
+    "from_email": "hassan.ali@example.com",
+    "subject": "Other roles",
+    "body": "I wasn't selected for this role but would love to be considered for other openings. Can you keep my CV on file?"
+  },
+  {
+    "id": "m044",
+    "from_name": "Mia Johnson",
+    "from_email": "mia.johnson@example.com",
+    "subject": "Internships",
+    "body": "Do you offer internships for students? I'm in my final year of a CS degree."
+  },
+  {
+    "id": "m045",
+    "from_name": "Gabriel Souza",
+    "from_email": "gabriel.souza@example.com",
+    "subject": "Reference letter",
+    "body": "Please send me your company's postal address, I'd like to mail a reference letter from my former manager."
+  },
+  {
+    "id": "m046",
+    "from_name": "Auto-reply",
+    "from_email": "auto.reply@example.com",
+    "subject": "Out of Office: Re: Interview",
+    "body": "I am out of the office until Monday with limited access to email. I will respond when I return."
+  },
+  {
+    "id": "m047",
+    "from_name": "Naomi Wright",
+    "from_email": "naomi.wright@example.com",
+    "subject": "CV feedback",
+    "body": "Even though I wasn't successful, could you give me some feedback on my CV?"
+  },
+  {
+    "id": "m048",
+    "from_name": "Ethan Brooks",
+    "from_email": "ethan.brooks@example.com",
+    "subject": "Re: Interview invite",
+    "body": "Thanks for the invite. I can do Thursday, but also what's the salary range? And btw the portal won't let me update my CV."
+  },
+  {
+    "id": "m049",
+    "from_name": "Olivia Grant",
+    "from_email": "olivia.grant@example.com",
+    "subject": "Still waiting",
+    "body": "Hi, still waiting to hear back and honestly I'm getting frustrated at the silence. Can someone tell me the status?"
+  },
+  {
+    "id": "m050",
+    "from_name": "Dev Patel",
+    "from_email": "dev.patel@example.com",
+    "subject": "Offer and start date",
+    "body": "Thanks for the offer! Can I start in two months instead of one, and is there any flexibility on the base pay?"
+  },
+  {
+    "id": "m051",
+    "from_name": "Lucy Adams",
+    "from_email": "lucy.adams@example.com",
+    "subject": "Hello",
+    "body": "Hello"
+  }
+]

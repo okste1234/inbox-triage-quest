@@ -9,7 +9,9 @@
     "review": "tsx src/review.ts",
     "test": "vitest run",
     "eval": "tsx evals/run_evals.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "label": "tsx evals/label.ts",
+    "label:compare": "tsx evals/compare_labels.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "latest",
