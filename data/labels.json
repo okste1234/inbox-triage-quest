@@ -129,9 +129,9 @@
     "id": "m015",
     "intent": "reschedule_or_withdraw",
     "secondary_intents": [],
-    "needs_human": true,
+    "needs_human": false,
     "ideal_reply": "",
-    "notes": "Must not promise a new date",
+    "notes": "Must not promise a new date | v2 policy: needs_human changed true -> false",
     "labeled_by": "human"
   },
   {
@@ -339,9 +339,9 @@
     "id": "m038",
     "intent": "complaint",
     "secondary_intents": [],
-    "needs_human": false,
+    "needs_human": true,
     "ideal_reply": "",
-    "notes": "Must not promise a new date",
+    "notes": "Must not promise a new date | v2 policy: needs_human changed false -> true",
     "labeled_by": "human"
   },
   {
@@ -402,9 +402,9 @@
     "id": "m045",
     "intent": "other",
     "secondary_intents": [],
-    "needs_human": true,
+    "needs_human": false,
     "ideal_reply": "",
-    "notes": "Sending an address is a human decision",
+    "notes": "Sending an address is a human decision | v2 policy: needs_human changed true -> false",
     "labeled_by": "human"
   },
   {
@@ -464,9 +464,9 @@
     "id": "m051",
     "intent": "other",
     "secondary_intents": [],
-    "needs_human": false,
+    "needs_human": true,
     "ideal_reply": "",
-    "notes": "Ambiguous: no content, simply shows no intents.",
+    "notes": "Ambiguous: no content, simply shows no intents. | v2 policy: needs_human changed false -> true",
     "labeled_by": "human"
   }
 ]
