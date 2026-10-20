@@ -6,8 +6,8 @@ Thin end-to-end slice. First step: a ground-truth set (about 50 synthetic messag
 - 04:00 Had AI generate 51 synthetic candidate messages (`data/sample_messages.json`). Distribution: roughly 6-9 per intent plus 4 deliberately ambiguous or multi-intent ones.
 - 04:00 AI also recorded the intent it *intended* for each message in `data/.ai_guess_labels.json`, kept hidden from me while labeling so my labels are independent.
 - 04:00 AI built a resumable labeling CLI (`npm run label`) and a comparison script (`npm run label:compare`). Smoke-tested with scripted input; typecheck passes.
-- I asked the AI to do the labeling for me instead (decision: I did not label by hand). It labeled all 51 with intent, secondary intents, needs_human and an ideal reply, validated against the zod schema. Every label carries `labeled_by: "ai"`.
-- `npm run label:compare` reports 0 disagreements with the AI's own hidden guesses.
+- **First pass (superseded, see Update below):** I asked the AI to do the labeling for me (I did not label by hand). It labeled all 51 with intent, secondary intents, needs_human and an ideal reply, validated against the zod schema, each marked `labeled_by: "ai"`. These now live in `data/labels.ai.json`.
+- First-pass check: 0 disagreements between those AI labels and the AI's own hidden guesses. This is the same model agreeing with itself, so it proves nothing. (My own labels later disagreed with the AI's on 1 intent and 5 needs_human; see below.)
 
 ## Habit I dropped / caught myself in
 (fill in honestly. Slip to record: I delegated the labeling, which was the one step meant to stay human. e.g. "Wanted to write the message set by hand; had AI generate it and spent my time on labeling, which is the part only I can do.")
@@ -19,7 +19,7 @@ Thin end-to-end slice. First step: a ground-truth set (about 50 synthetic messag
 - Nothing in the product yet. Known weakness of the data itself: AI-written messages are cleaner and more polite than real ones. That inflates any accuracy number measured on them; Day 3 adversarial data is meant to counter this.
 
 ## What I didn't fix
-- **The ground truth is not independent.** The same model wrote the messages, guessed the intents and then produced the labels, so "0 disagreements" says almost nothing; it is agreement with itself. Any accuracy number measured on `labels.json` will be optimistic until a human reviews it. Not fixed yet: I still need to read through `data/labels.json`, change what I disagree with, and set `labeled_by` to `human` on the reviewed ones.
+- **The ground truth is not independent.** The same model wrote the messages, guessed the intents and then produced the labels, so "0 disagreements" says almost nothing; it is agreement with itself. Any accuracy number measured on `labels.json` will be optimistic until a human reviews it. (Status after the update below: I did the review and labeled with AI help; provenance is now recorded per label. The answer key is still not fully independent.)
 - Labels also encode the AI's taxonomy decisions (e.g. m019 "running late" and m025 "remote/hours" have no good home; flagged in notes).
 - Ideal replies are optional in the labeler; not all 51 will have one.
 
