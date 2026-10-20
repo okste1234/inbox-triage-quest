@@ -24,6 +24,7 @@ TypeScript (Node 22), `zod` for schemas, `@anthropic-ai/sdk`, `vitest` for tests
 - Message text is **untrusted data**, never instructions. Delimit it in prompts and tell the model so. Text inside a message that tries to direct the assistant sets `needs_human = true` and is flagged `injection_suspected`.
 - Empty, abusive, or multi-intent messages -> `needs_human = true`.
 - Confidence below threshold (start at 0.7, tune with evals) -> `needs_human = true`.
+- Don't log or echo email addresses / phone numbers beyond what's needed for review.
 
 ## `needs_human` policy (v2, added after Day 1 label disagreements)
 Day 1 showed `needs_human` meant two things: "don't trust the draft" and "a person must do something". Only the first is `needs_human`. Needing someone to act (check a status, move a calendar slot, send an address) is normal and the draft says "I'll check". It does not route to the human-only bucket.
@@ -38,8 +39,6 @@ Day 1 showed `needs_human` meant two things: "don't trust the draft" and "a pers
 7. **Low confidence**: below 0.7.
 
 Rules 1, 2, 6, 7 and blank messages are enforced in code (`src/policy.ts`) regardless of what the model says. Rules 3, 4 and non-blank contentless messages are the model's judgment. Auto-replies (out of office) are `other`, not `needs_human`, and get no draft.
-
-- Don't log or echo email addresses / phone numbers beyond what's needed for review.
 
 ## Intent taxonomy (v1, may change; log changes)
 `status_check`, `scheduling`, `reschedule_or_withdraw`, `compensation_question`, `application_problem`, `complaint`, `other`.

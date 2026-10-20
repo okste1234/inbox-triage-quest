@@ -40,3 +40,32 @@ export const LabelSchema = z.object({
   labeled_by: z.enum(["human", "human_ai_assisted", "ai"]).default("human"),
 });
 export type Label = z.infer<typeof LabelSchema>;
+
+/** What the model must return for one message (validated after parsing). */
+export const ModelOutputSchema = z.object({
+  intent: IntentSchema,
+  secondary_intents: z.array(IntentSchema).default([]),
+  confidence: z.number().min(0).max(1),
+  needs_human: z.boolean(),
+  injection_suspected: z.boolean(),
+  reasons: z.string(),
+});
+export type ModelOutput = z.infer<typeof ModelOutputSchema>;
+
+export type EscalationReason =
+  | "complaint"
+  | "multi_intent"
+  | "injection_suspected"
+  | "low_confidence"
+  | "blank"
+  | "model_judgment"
+  | "error";
+
+/** Final per-message result after code-enforced policy is applied. */
+export interface Classification extends ModelOutput {
+  id: string;
+  /** Why needs_human is true. Empty when it is false. */
+  escalation_reasons: EscalationReason[];
+  /** Set when the model call or its output failed; the result is then a safe fallback. */
+  error?: string;
+}
