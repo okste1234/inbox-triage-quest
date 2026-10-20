@@ -33,5 +33,7 @@ export const LabelSchema = z.object({
   /** What a good reply would say. Optional; blank means "not written yet". */
   ideal_reply: z.string().default(""),
   notes: z.string().default(""),
+  /** Who produced this label. Ground truth from "ai" is weaker than from "human"; keep it visible. */
+  labeled_by: z.enum(["human", "ai"]).default("human"),
 });
 export type Label = z.infer<typeof LabelSchema>;

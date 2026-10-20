@@ -1,0 +1,470 @@
+[
+  {
+    "id": "m001",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for checking in. I don't have an update to share yet, but I've passed your note to the hiring team and someone will get back to you as soon as there is news.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m002",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for checking in. I don't have an update to share yet, but I've passed your note to the hiring team and someone will get back to you as soon as there is news.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m003",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for asking. I can't confirm the role's current status from here, so I've passed your question to the hiring team and they'll reply to you directly.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m004",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for following up, and I'm sorry the wait has run longer than you expected. I've flagged your note to the hiring team and someone will update you soon.",
+    "notes": "Candidate cites a promised timeline; reply must not restate or extend it",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m005",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for checking. I'm confirming whether your take-home was received and will get back to you shortly.",
+    "notes": "Could also be read as application_problem (no confirmation). Chose status_check: asks whether it was received",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m006",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for checking in. I don't have an update to share yet, but I've passed your note to the hiring team and someone will get back to you as soon as there is news.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m007",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for asking. I've asked the hiring team to confirm where your application stands and someone will follow up with you.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m008",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for checking in. I don't have an update to share yet, but I've passed your note to the hiring team and someone will get back to you as soon as there is news.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m009",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for letting us know your availability. I've noted Thursday and Friday afternoon and will follow up to confirm a time.",
+    "notes": "Reply must not confirm a slot",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m010",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for asking. I'll check with the team whether a weekend slot is possible and come back to you.",
+    "notes": "Must not promise a weekend",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m011",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Good question. I'll confirm the format and expected length with the team and send you the details.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m012",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for letting us know. I'll check which times are available for your time zone and send options.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m013",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Sorry the invite didn't reach you. I'll check what was sent and make sure you get it.",
+    "notes": "Could be application_problem; chose scheduling because the ask is the calendar invite",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m014",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Great to hear from you. I'll send you the details for booking the next round shortly.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m015",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for letting us know. I'll check what options there are for rescheduling and be in touch.",
+    "notes": "Must not promise a new date",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m016",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for letting us know, and congratulations on your new role. I've noted your withdrawal. We wish you all the best.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m017",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry to hear that, and I hope everything is okay. I've let the team know and will be in touch about rebooking.",
+    "notes": "Same-day: a human must act now",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m018",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for letting us know. I've noted your request to be removed from consideration. We appreciate your interest and wish you well.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m019",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thanks for the heads-up. I'm letting the panel know right now.",
+    "notes": "Taxonomy gap: late-arrival notice fits no intent well. Time-critical, human must relay immediately",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m020",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for letting us know. I'll check what is possible for the technical round and get back to you.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m021",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for telling us, and for your honest feedback. I've noted your withdrawal. We wish you every success.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m022",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for asking. I don't have the compensation details to share in this message, so I've passed your question to the recruiter, who can speak to this with you directly.",
+    "notes": "Reply must not state a number or range",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m023",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for the question. I can't confirm benefits details here, so I've passed it to the recruiter who can answer directly.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m024",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thank you for being upfront. I can't discuss compensation in this message, so I've passed your note to the recruiter who will follow up.",
+    "notes": "Negotiation: must not match or counter. Human required",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m025",
+    "intent": "compensation_question",
+    "secondary_intents": [
+      "other"
+    ],
+    "needs_human": false,
+    "ideal_reply": "Thanks for your questions. I'll check the details on remote working, hours and benefits with the team and come back to you.",
+    "notes": "Remote/hours are not compensation. Taxonomy gap; closest fit",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m026",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "I understand, and thanks for asking up front. I can't share a band in this message, so I've passed your request to the recruiter.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m027",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for asking. I'll check what is available for this position and the recruiter will follow up with you.",
+    "notes": "Must not confirm or deny a bonus",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m028",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thank you for your message. I've passed your request to the recruiter, who will follow up with you about the written offer.",
+    "notes": "Offer terms: human must handle; draft must not confirm any amount",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m029",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Sorry about the trouble. I've reported the upload error to the team and will follow up. In the meantime, you can reply here with your CV attached.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m030",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for catching that. I'll check how your resume can be replaced and get back to you.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m031",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for letting us know. I'll check whether your application was received and confirm with you.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m032",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for flagging that. I'll get your name and phone number corrected and confirm once done.",
+    "notes": "Fixing records is an action a human must take",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m033",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Sorry about that. I'll look into getting you a working assessment link.",
+    "notes": "Must not promise a new deadline",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m034",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for letting us know. I'll look into removing the duplicate.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m035",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for flagging that. I'll check how best to add your cover letter. If it's easier, you can reply here with it attached.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m036",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry for the repeated disruption, and I understand your frustration. I've raised this with the team and someone will follow up with you.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m037",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry about your experience, and thank you for telling us. I've raised this with the team and someone will respond to you directly.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m038",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry you were left waiting. Your time matters. I've raised this with the team and someone will respond to you.",
+    "notes": "Must not promise a new date",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m039",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thank you for raising this, and I'm sorry for the confusion. I've passed it to the team to review.",
+    "notes": "Must not confirm or deny what the job ad said",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m040",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry your experience felt this way. I've shared your feedback with the team, and thank you for the time you invested.",
+    "notes": "Must not promise feedback",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m041",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Thank you for raising this. It is a serious concern and I've passed it to the right people to review.",
+    "notes": "Possible discrimination issue: human only, escalate. Draft should be minimal",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m042",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for your kind words. It was a pleasure speaking with you too.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m043",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thank you for your interest in future roles. I've passed your request to the team.",
+    "notes": "Must not promise to keep the CV on file or to contact them",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m044",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for your interest. I'll check whether we have internships and get back to you.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m045",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for letting us know. I'll check the right address for you and send it.",
+    "notes": "Sending an address is a human decision",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m046",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "Auto-reply; no reply needed. Ideal outcome is ignoring it",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m047",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "Thanks for asking. I've passed your request to the team, though I can't promise feedback on your CV.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m048",
+    "intent": "scheduling",
+    "secondary_intents": [
+      "compensation_question",
+      "application_problem"
+    ],
+    "needs_human": true,
+    "ideal_reply": "Thanks for your message. I'll follow up on timing, the salary question, and the portal problem separately.",
+    "notes": "Three intents in one message: human must split",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m049",
+    "intent": "status_check",
+    "secondary_intents": [
+      "complaint"
+    ],
+    "needs_human": true,
+    "ideal_reply": "I'm sorry for the silence and understand your frustration. I've passed your note to the hiring team so you get an update.",
+    "notes": "",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m050",
+    "intent": "compensation_question",
+    "secondary_intents": [
+      "scheduling"
+    ],
+    "needs_human": true,
+    "ideal_reply": "Thanks for your message. I've passed your questions about the start date and pay to the recruiter.",
+    "notes": "Offer negotiation: human only",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "m051",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "Hello! How can we help you?",
+    "notes": "Ambiguous: no content. Human should decide",
+    "labeled_by": "ai"
+  }
+]
