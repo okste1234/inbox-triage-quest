@@ -34,9 +34,9 @@ export const LabelSchema = z.object({
   ideal_reply: z.string().default(""),
   notes: z.string().default(""),
   /**
-   * Provenance. "human" = decided independently, "ai_reviewed" = AI label I looked at and kept,
-   * "ai" = AI label unreviewed. Weaker provenance means weaker ground truth; keep it visible.
+   * Provenance. "human" = decided without AI input, "human_ai_assisted" = I made the call with AI help,
+   * "ai" = AI label I did not review. Weaker provenance means weaker ground truth; keep it visible.
    */
-  labeled_by: z.enum(["human", "ai_reviewed", "ai"]).default("human"),
+  labeled_by: z.enum(["human", "human_ai_assisted", "ai"]).default("human"),
 });
 export type Label = z.infer<typeof LabelSchema>;
