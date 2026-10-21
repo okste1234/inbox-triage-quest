@@ -59,6 +59,7 @@ export type EscalationReason =
   | "low_confidence"
   | "blank"
   | "model_judgment"
+  | "draft_blocked"
   | "error";
 
 /** Final per-message result after code-enforced policy is applied. */

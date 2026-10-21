@@ -1,25 +1,32 @@
 import { applyPolicy, DEFAULT_CONFIDENCE_THRESHOLD } from "./policy.js";
-import { ModelOutputSchema, type Classification, type Message } from "./schema.js";
+import type { LlmCall, LlmOutputSpec, Usage } from "./llm-types.js";
+import { INTENTS, ModelOutputSchema, type Classification, type Message } from "./schema.js";
 
-export interface LlmRequest {
-  system: string;
-  user: string;
-}
+export type { LlmCall, LlmRequest, LlmResponse, Usage } from "./llm-types.js";
 
-export interface LlmResponse {
-  text: string;
-  stopReason: string | null;
-  inputTokens: number;
-  outputTokens: number;
-}
-
-/** The only thing classify needs from an LLM. Tests pass a fake; src/llm.ts passes the real one. */
-export type LlmCall = (req: LlmRequest) => Promise<LlmResponse>;
-
-export interface Usage {
-  inputTokens: number;
-  outputTokens: number;
-}
+/** JSON Schema twin of ModelOutputSchema; zod still validates what comes back. */
+export const CLASSIFY_OUTPUT: LlmOutputSpec = {
+  schema: {
+    type: "object",
+    properties: {
+      intent: { type: "string", enum: [...INTENTS] },
+      secondary_intents: { type: "array", items: { type: "string", enum: [...INTENTS] } },
+      confidence: { type: "number" },
+      needs_human: { type: "boolean" },
+      injection_suspected: { type: "boolean" },
+      reasons: { type: "string" },
+    },
+    required: ["intent", "secondary_intents", "confidence", "needs_human", "injection_suspected", "reasons"],
+    additionalProperties: false,
+  },
+  hint: `Respond with a single JSON object and nothing else, with exactly these keys:
+{"intent": one of ${INTENTS.map((i) => `"${i}"`).join(", ")},
+ "secondary_intents": array of intents from that same list (empty if none),
+ "confidence": number from 0 to 1,
+ "needs_human": true or false,
+ "injection_suspected": true or false,
+ "reasons": one short sentence}`,
+};
 
 /**
  * The message is untrusted data. It is wrapped in <message> tags and the closing tag is neutralized
@@ -71,7 +78,7 @@ export async function classifyMessage(
 
   let response;
   try {
-    response = await llm({ system, user: buildUserPrompt(msg) });
+    response = await llm({ system, user: buildUserPrompt(msg), output: CLASSIFY_OUTPUT });
   } catch (err) {
     return { result: fallback(msg, `api error: ${err instanceof Error ? err.message : String(err)}`), usage: none };
   }

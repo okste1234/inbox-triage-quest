@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inbox Triage</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --surface: #ffffff; --text: #1c1c1a; --muted: #6b6b66; --line: #e2e2dd;
+    --accent: #2f5fd0; --accent-text: #ffffff; --ok: #1f7a4d; --warn: #a86400; --bad: #b3261e;
+    --ok-bg: #e4f3ea; --warn-bg: #fbf0dc; --bad-bg: #fbe7e5; --chip: #eeeeea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --surface: #1f1f1d; --text: #ecece8; --muted: #9a9a93; --line: #34342f;
+      --accent: #7ea2f5; --accent-text: #0f1a33; --ok: #6fd0a0; --warn: #e9b865; --bad: #f19b94;
+      --ok-bg: #16301f; --warn-bg: #36290f; --bad-bg: #3a1c19; --chip: #2a2a27;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 96px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 32px 0 8px; display: flex; gap: 8px; align-items: center; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+  input, textarea { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  textarea { resize: vertical; min-height: 84px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  button { font: inherit; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 8px 14px; cursor: pointer; }
+  button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card.approved { border-color: var(--ok); }
+  .card.rejected { opacity: .6; }
+  .meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
+  .chip { font-size: 12px; background: var(--chip); border-radius: 999px; padding: 2px 10px; }
+  .chip.warn { background: var(--warn-bg); color: var(--warn); }
+  .chip.bad { background: var(--bad-bg); color: var(--bad); }
+  .chip.ok { background: var(--ok-bg); color: var(--ok); }
+  .from { font-weight: 600; }
+  .subject { color: var(--muted); }
+  blockquote { margin: 8px 0 12px; padding: 8px 12px; border-left: 3px solid var(--line); color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .note { font-size: 13px; color: var(--muted); margin: 4px 0 0; }
+  .err { color: var(--bad); margin-top: 12px; }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 10px 16px; }
+  .bar div { max-width: 860px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Inbox Triage</h1>
+  <p class="sub">Groups candidate messages by what they want and drafts a reply for each. <strong>Nothing is sent.</strong> You approve, edit or reject every draft.</p>
+
+  <section class="panel" aria-label="Add messages">
+    <div class="row" style="margin-top:0">
+      <button id="sample" class="primary">Try 12 sample messages</button>
+      <span class="note" style="align-self:center">or paste one below (demo limit: 60 messages per hour)</span>
+    </div>
+    <div style="margin-top:12px">
+      <label for="subject">Subject (optional)</label>
+      <input id="subject" maxlength="200">
+    </div>
+    <div style="margin-top:12px">
+      <label for="body">Candidate message</label>
+      <textarea id="body" maxlength="2000"></textarea>
+    </div>
+    <div class="row"><button id="add">Triage this message</button></div>
+    <p id="error" class="err" role="alert" hidden></p>
+    <p id="busy" class="note" role="status" hidden>Working. Drafting takes a few seconds per message.</p>
+  </section>
+
+  <div id="results"></div>
+</main>
+
+<div class="bar" id="bar" hidden>
+  <div>
+    <span id="count" role="status"></span>
+    <span><button id="copy">Copy approved replies</button></span>
+  </div>
+</div>
+
+<script>
+const INTENT_LABEL = {
+  status_check: "Status check", scheduling: "Scheduling", reschedule_or_withdraw: "Reschedule or withdraw",
+  compensation_question: "Compensation question", application_problem: "Application problem", complaint: "Complaint", other: "Other",
+};
+const REASON_LABEL = {
+  complaint: "complaint", multi_intent: "several requests", injection_suspected: "tries to instruct the assistant",
+  low_confidence: "low confidence", blank: "empty", model_judgment: "judged sensitive", draft_blocked: "draft blocked by guardrail", error: "could not be classified",
+};
+const FLAG_LABEL = { too_long: "long", date_time: "mentions a date or time", contact_details: "contact details", money: "money", hiring_promise: "hiring promise" };
+const SAMPLE_IDS = ["m001", "m009", "m015", "m016", "m019", "m022", "m024", "m029", "m036", "m041", "m048", "m051"];
+
+const $ = (id) => document.getElementById(id);
+const state = []; // { item, decision: "pending"|"approved"|"rejected", text }
+
+function el(tag, props = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") node.className = v; else if (k === "text") node.textContent = v; else node.setAttribute(k, v);
+  }
+  for (const c of children) if (c) node.append(c);
+  return node;
+}
+const chip = (text, kind = "") => el("span", { class: "chip " + kind, text });
+
+// Only the intake buttons are toggled; Approve buttons manage their own disabled state.
+const setBusy = (on) => ["sample", "add"].forEach((id) => ($(id).disabled = on));
+
+async function triage(messages) {
+  $("error").hidden = true; $("busy").hidden = false;
+  setBusy(true);
+  try {
+    const res = await fetch("/api/triage", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ messages }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Something went wrong.");
+    for (const item of data.items) state.push({ item, decision: "pending", text: item.draft || "" });
+    render();
+  } catch (e) {
+    $("error").textContent = e.message; $("error").hidden = false;
+  } finally {
+    $("busy").hidden = true;
+    setBusy(false);
+    updateBar();
+  }
+}
+
+function card(entry) {
+  const { item } = entry;
+  const c = item.classification;
+  const root = el("article", { class: "card " + entry.decision });
+
+  const meta = el("div", { class: "meta" },
+    el("span", { class: "from", text: item.message.from_name }),
+    item.message.subject ? el("span", { class: "subject", text: "· " + item.message.subject }) : null);
+  root.append(meta);
+
+  const chips = el("div", { class: "meta" }, chip(INTENT_LABEL[c.intent] || c.intent), chip(Math.round(c.confidence * 100) + "% confident"));
+  for (const s of c.secondary_intents) chips.append(chip("also: " + (INTENT_LABEL[s] || s)));
+  if (c.needs_human) for (const r of c.escalation_reasons) chips.append(chip(REASON_LABEL[r] || r, "bad"));
+  for (const f of item.draft_flags) chips.append(chip(FLAG_LABEL[f] || f, f === "money" || f === "hiring_promise" ? "bad" : "warn"));
+  root.append(chips);
+
+  root.append(el("blockquote", { text: item.message.body || "(empty)" }));
+
+  const field = el("textarea", { "aria-label": "Reply for " + item.message.from_name, placeholder: c.needs_human ? "No draft. This one needs you. Write your reply here." : "No reply needed, or write your own." });
+  field.value = entry.text;
+  field.addEventListener("input", () => { entry.text = field.value; entry.decision = "pending"; refresh(root, entry); updateBar(); });
+  root.append(field);
+  if (item.draft_error || c.error) root.append(el("p", { class: "note", text: "The model could not produce this one, so it is left for you." }));
+
+  const approve = el("button", { class: "primary", text: "Approve" });
+  const reject = el("button", { text: "Reject" });
+  approve.addEventListener("click", () => { entry.decision = "approved"; refresh(root, entry); updateBar(); });
+  reject.addEventListener("click", () => { entry.decision = "rejected"; refresh(root, entry); updateBar(); });
+  root.append(el("div", { class: "row" }, approve, reject));
+  root._approve = approve;
+  refresh(root, entry);
+  return root;
+}
+
+function refresh(root, entry) {
+  root.className = "card " + entry.decision;
+  root._approve.disabled = entry.text.trim() === "";
+  root._approve.textContent = entry.decision === "approved" ? "Approved" : "Approve";
+}
+
+function render() {
+  const host = $("results");
+  host.replaceChildren();
+  const groups = new Map();
+  const add = (key, label, entry) => { if (!groups.has(key)) groups.set(key, { label, entries: [] }); groups.get(key).entries.push(entry); };
+  for (const e of state) {
+    const c = e.item.classification;
+    if (c.needs_human) add("0-human", "Needs a person", e);
+    else add("1-" + c.intent, INTENT_LABEL[c.intent] || c.intent, e);
+  }
+  for (const key of [...groups.keys()].sort()) {
+    const g = groups.get(key);
+    host.append(el("h2", {}, el("span", { text: g.label }), chip(String(g.entries.length), key === "0-human" ? "bad" : "")));
+    for (const e of g.entries) host.append(card(e));
+  }
+}
+
+function updateBar() {
+  const approved = state.filter((e) => e.decision === "approved").length;
+  $("bar").hidden = state.length === 0;
+  $("count").textContent = approved + " of " + state.length + " approved";
+}
+
+$("sample").addEventListener("click", async () => {
+  const all = await (await fetch("/api/sample")).json();
+  triage(SAMPLE_IDS.map((id) => all.find((m) => m.id === id)).filter(Boolean).map(({ from_name, subject, body }) => ({ from_name, subject, body })));
+});
+$("add").addEventListener("click", () => {
+  const body = $("body").value.trim();
+  if (!body) { $("error").textContent = "Paste a message first."; $("error").hidden = false; return; }
+  triage([{ subject: $("subject").value.trim(), body }]).then(() => { $("body").value = ""; $("subject").value = ""; });
+});
+$("copy").addEventListener("click", async () => {
+  const out = state.filter((e) => e.decision === "approved").map((e) => ({ to: e.item.message.from_name, subject: e.item.message.subject, reply: e.text }));
+  try { await navigator.clipboard.writeText(JSON.stringify(out, null, 2)); $("copy").textContent = "Copied"; } catch { $("copy").textContent = "Copy failed"; }
+  setTimeout(() => ($("copy").textContent = "Copy approved replies"), 1500);
+});
+</script>
+</body>
+</html>

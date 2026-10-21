@@ -1,0 +1,18 @@
+# Render Blueprint: one free web service built from the Dockerfile.
+services:
+  - type: web
+    name: inbox-triage
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: PROVIDER
+        value: openai-compatible
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: MODEL
+        value: llama-3.1-8b-instant   # confirm this name in the Groq console; free-tier model lists change
+      - key: OPENAI_API_KEY
+        sync: false                   # paste in the Render dashboard, never in git
+      - key: MAX_MESSAGES_PER_HOUR
+        value: "60"

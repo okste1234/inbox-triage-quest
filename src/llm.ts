@@ -1,35 +1,19 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { INTENTS } from "./schema.js";
-import type { LlmCall } from "./classify.js";
+import type { LlmCall } from "./llm-types.js";
 
 export const DEFAULT_MODEL = "claude-opus-5-5";
-
-/** JSON Schema twin of ModelOutputSchema; zod still validates what comes back. */
-const OUTPUT_JSON_SCHEMA = {
-  type: "object",
-  properties: {
-    intent: { type: "string", enum: [...INTENTS] },
-    secondary_intents: { type: "array", items: { type: "string", enum: [...INTENTS] } },
-    confidence: { type: "number" },
-    needs_human: { type: "boolean" },
-    injection_suspected: { type: "boolean" },
-    reasons: { type: "string" },
-  },
-  required: ["intent", "secondary_intents", "confidence", "needs_human", "injection_suspected", "reasons"],
-  additionalProperties: false,
-} as const;
 
 export function makeAnthropicCall(model: string = process.env.MODEL || DEFAULT_MODEL): LlmCall {
   const client = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
 
-  return async ({ system, user }) => {
+  return async ({ system, user, output }) => {
     const response = await client.messages.create({
       model,
       // Thinking tokens count toward max_tokens, so leave room even at low effort.
       max_tokens: 4000,
       system,
       messages: [{ role: "user", content: user }],
-      output_config: { effort: "low", format: { type: "json_schema", schema: OUTPUT_JSON_SCHEMA } },
+      output_config: { effort: "low", format: { type: "json_schema", schema: output.schema } },
     });
     const text = response.content.find((b) => b.type === "text");
     return {
@@ -58,15 +42,6 @@ export function resolveModel(env: Env = process.env): string {
   throw new Error("MODEL is required when PROVIDER=openai-compatible (for example llama-3.1-8b-instant)");
 }
 
-/** Open models in JSON mode need the exact shape spelled out; Anthropic's schema output does not. */
-const JSON_SHAPE_INSTRUCTION = `Respond with a single JSON object and nothing else, with exactly these keys:
-{"intent": one of ${INTENTS.map((i) => `"${i}"`).join(", ")},
- "secondary_intents": array of intents from that same list (empty if none),
- "confidence": number from 0 to 1,
- "needs_human": true or false,
- "injection_suspected": true or false,
- "reasons": one short sentence}`;
-
 export interface OpenAICompatibleConfig {
   baseUrl: string;
   model: string;
@@ -79,7 +54,7 @@ export function makeOpenAICompatibleCall({ baseUrl, model, apiKey }: OpenAICompa
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  return async ({ system, user }) => {
+  return async ({ system, user, output }) => {
     const res = await fetch(url, {
       method: "POST",
       headers,
@@ -89,7 +64,7 @@ export function makeOpenAICompatibleCall({ baseUrl, model, apiKey }: OpenAICompa
         max_tokens: 1000,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: `${system}\n\n${JSON_SHAPE_INSTRUCTION}` },
+          { role: "system", content: `${system}\n\n${output.hint}` },
           { role: "user", content: user },
         ],
       }),

@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeOpenAICompatibleCall, resolveProvider } from "../src/llm.js";
+import type { LlmOutputSpec } from "../src/llm-types.js";
+
+const output: LlmOutputSpec = { schema: { type: "object" }, hint: 'HINT with "injection_suspected"' };
 
 const okBody = (content: string, finish = "stop") => ({
   choices: [{ message: { content }, finish_reason: finish }],
@@ -18,7 +21,7 @@ describe("makeOpenAICompatibleCall", () => {
   it("posts a chat completion with JSON mode and the system prompt", async () => {
     const fetchMock = stubFetch(okBody('{"a":1}'));
     const call = makeOpenAICompatibleCall({ baseUrl: "http://localhost:11434/v1", model: "llama3.1", apiKey: "k" });
-    await call({ system: "SYS", user: "USER" });
+    await call({ system: "SYS", user: "USER", output });
 
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe("http://localhost:11434/v1/chat/completions");
@@ -35,7 +38,7 @@ describe("makeOpenAICompatibleCall", () => {
   it("returns text, token usage and a normalized stop reason", async () => {
     stubFetch(okBody('{"a":1}'));
     const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m" });
-    expect(await call({ system: "s", user: "u" })).toEqual({
+    expect(await call({ system: "s", user: "u", output })).toEqual({
       text: '{"a":1}',
       stopReason: "end_turn",
       inputTokens: 12,
@@ -46,12 +49,12 @@ describe("makeOpenAICompatibleCall", () => {
   it("maps finish_reason length to max_tokens", async () => {
     stubFetch(okBody("{", "length"));
     const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m" });
-    expect((await call({ system: "s", user: "u" })).stopReason).toBe("max_tokens");
+    expect((await call({ system: "s", user: "u", output })).stopReason).toBe("max_tokens");
   });
 
   it("omits the Authorization header when there is no key (local Ollama)", async () => {
     const fetchMock = stubFetch(okBody("{}"));
-    await makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m" })({ system: "s", user: "u" });
+    await makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m" })({ system: "s", user: "u", output });
     const init = fetchMock.mock.calls[0][1] as unknown as RequestInit;
     expect(init.headers as Record<string, string>).not.toHaveProperty("Authorization");
   });
@@ -59,7 +62,7 @@ describe("makeOpenAICompatibleCall", () => {
   it("throws on a non-2xx response so classifyMessage can turn it into needs_human", async () => {
     stubFetch({ error: { message: "rate limited" } }, 429);
     const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m" });
-    await expect(call({ system: "s", user: "u" })).rejects.toThrow(/429/);
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/429/);
   });
 });
 
