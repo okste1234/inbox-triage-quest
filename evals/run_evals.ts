@@ -1,11 +1,11 @@
 // Runs the classifier over data/sample_messages.json and scores it against data/labels.json.
 //   npm run eval -- [--prompt classify.v1] [--out evals/results/day2_baseline.json] [--concurrency 5]
-// Uses the live API (needs ANTHROPIC_API_KEY). Cost and latency are measured, not estimated.
+// Uses a live model (Anthropic API, or any OpenAI-compatible endpoint such as local Ollama; see .env.example). Cost and latency are measured, not estimated.
 import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
 import { z } from "zod";
 import { classifyMessage, type Usage } from "../src/classify.js";
-import { DEFAULT_MODEL, makeAnthropicCall } from "../src/llm.js";
+import { makeLlmCall, resolveModel, resolveProvider } from "../src/llm.js";
 import { LabelSchema, MessageSchema, type Classification } from "../src/schema.js";
 import { score } from "./score.js";
 
@@ -23,19 +23,19 @@ const percentile = (xs: number[], p: number): number => {
 };
 
 async function main(): Promise<void> {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ANTHROPIC_API_KEY is not set. Copy .env.example to .env and add a key, then re-run.");
+  if (resolveProvider() === "anthropic" && !process.env.ANTHROPIC_API_KEY) {
+    console.error("ANTHROPIC_API_KEY is not set. Copy .env.example to .env and add a key, or set PROVIDER=openai-compatible (see README).");
     process.exit(1);
   }
   const prompt = arg("prompt", "classify.v1");
   const out = arg("out", "evals/results/day2_baseline.json");
   const concurrency = Number(arg("concurrency", "5"));
-  const model = process.env.MODEL || DEFAULT_MODEL;
+  const model = resolveModel();
 
   const system = readFileSync(`prompts/${prompt}.md`, "utf8");
   const messages = z.array(MessageSchema).parse(JSON.parse(readFileSync("data/sample_messages.json", "utf8")));
   const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync("data/labels.json", "utf8")));
-  const llm = makeAnthropicCall(model);
+  const llm = makeLlmCall();
 
   const results: Classification[] = new Array(messages.length);
   const latencies: number[] = new Array(messages.length);
@@ -64,6 +64,7 @@ async function main(): Promise<void> {
 
   const report = {
     prompt,
+    provider: resolveProvider(),
     model,
     ran_at: new Date().toISOString(),
     n: messages.length,

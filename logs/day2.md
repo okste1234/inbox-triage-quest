@@ -24,5 +24,8 @@ Evals before features: settle what `needs_human` means, write the scoring and cl
 - Server-side refusal fallbacks are not enabled; a refusal just routes the message to a person. Fine for this task, but untested.
 - Labels are `human_ai_assisted` for 45 of 51, so any accuracy number overstates how independent the answer key is.
 
+## Addendum: open-model option
+No API key was available and I did not want the eval blocked on one, so I added an OpenAI-compatible provider (`PROVIDER=openai-compatible`, works with local Ollama, Groq, OpenRouter). Tests first again: 8 new tests failed ("not a function"), then 37/37 pass. Not yet run against any real model. Caveat: open models run in JSON mode with the schema spelled out in the prompt (no enforced schema), so more parse failures are likely than with Anthropic's structured output; they fall back to `needs_human` and are counted as errors in the eval.
+
 ## Tomorrow
 Add the key, run `npm run eval`, record the baseline in `evals/results/day2_baseline.json` and `prompts/CHANGELOG.md`. Then Day 3: build adversarial data (injection, multi-intent, Pidgin, blank) and a 1,000-message load test.
