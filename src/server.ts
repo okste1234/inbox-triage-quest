@@ -136,6 +136,10 @@ export function createApp(deps: AppDeps): Server {
         if (outcome === "timeout") {
           return send(res, 504, { error: "The model is taking too long right now. Please try again in a minute." });
         }
+        const failed = outcome.items.filter((i) => i.classification.error).length;
+        if (failed > 0 && failed >= Math.ceil(outcome.items.length / 2)) {
+          return send(res, 503, { error: "The model provider is not answering right now (it may have reached its free daily limit). Please try again later." });
+        }
         return send(res, 200, { items: outcome.items.map(scrub), usage: outcome.usage });
       }
       return send(res, 404, { error: "not found" });

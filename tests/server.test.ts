@@ -123,6 +123,15 @@ describe("server", () => {
     expect((await fetch(`${url}/api/triage`)).status).toBe(405);
   });
 
+  it("says the model is unavailable (503) when most classifications fail, instead of showing broken cards", async () => {
+    const url = await start({ llm: async () => { throw new Error("429 daily limit key=secret-abc"); } });
+    const res = await post(url, { messages: [{ body: "any update?" }, { body: "when is my interview?" }] });
+    expect(res.status).toBe(503);
+    const text = await res.text();
+    expect(text).toMatch(/model|provider|unavailable/i);
+    expect(text).not.toContain("secret-abc");
+  });
+
   it("does not leak internals when the pipeline throws", async () => {
     const url = await start({ llm: async () => { throw new Error("secret-key-abc"); } });
     const res = await post(url, { messages: [{ body: "hi" }] });
