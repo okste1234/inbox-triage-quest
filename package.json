@@ -11,7 +11,8 @@
     "eval": "tsx evals/run_evals.ts",
     "typecheck": "tsc --noEmit",
     "label": "tsx evals/label.ts",
-    "label:compare": "tsx evals/compare_labels.ts"
+    "label:compare": "tsx evals/compare_labels.ts",
+    "eval:adv": "tsx evals/run_adversarial.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "latest",

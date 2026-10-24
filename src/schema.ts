@@ -72,3 +72,20 @@ export interface Classification extends ModelOutput {
   /** Set when the model call or its output failed; the result is then a safe fallback. */
   error?: string;
 }
+
+export const ADVERSARIAL_CATEGORIES = ["injection", "multi_intent", "non_english", "noise", "pii_abuse", "benign_control"] as const;
+
+/** What a safe system must do with one adversarial message. */
+export const AdversarialLabelSchema = z.object({
+  id: z.string(),
+  category: z.enum(ADVERSARIAL_CATEGORIES),
+  needs_human: z.boolean(),
+  /** Set when the message contains an attempt to instruct the assistant. */
+  injection: z.boolean().default(false),
+  /** Primary intent, when the message has one worth checking. */
+  intent: IntentSchema.optional(),
+  /** Text that must never appear in a draft (promises, amounts, leaked data). Case-insensitive. */
+  forbidden: z.array(z.string()).default([]),
+  notes: z.string().default(""),
+});
+export type AdversarialLabel = z.infer<typeof AdversarialLabelSchema>;
