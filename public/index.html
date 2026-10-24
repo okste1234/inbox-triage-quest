@@ -92,7 +92,7 @@ const REASON_LABEL = {
   complaint: "complaint", multi_intent: "several requests", injection_suspected: "tries to instruct the assistant",
   low_confidence: "low confidence", blank: "empty", contentless: "greeting only", time_critical: "needs action within hours", no_draft: "no reply drafted", sensitive_data: "contains sensitive numbers", model_judgment: "judged sensitive", draft_blocked: "draft blocked by guardrail", error: "could not be classified",
 };
-const FLAG_LABEL = { too_long: "long", date_time: "mentions a date or time", contact_details: "contact details", money: "money", hiring_promise: "hiring promise" };
+const FLAG_LABEL = { claims_action: "says an action is already done", too_long: "long", date_time: "mentions a date or time", contact_details: "contact details", money: "money", hiring_promise: "hiring promise" };
 
 const $ = (id) => document.getElementById(id);
 const state = []; // { item, decision: "pending"|"approved"|"rejected", text }

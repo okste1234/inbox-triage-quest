@@ -1,4 +1,4 @@
-export type DraftFlag = "too_long" | "money" | "hiring_promise" | "date_time" | "contact_details";
+export type DraftFlag = "too_long" | "money" | "hiring_promise" | "date_time" | "contact_details" | "claims_action";
 
 export const MAX_DRAFT_WORDS = 90;
 
@@ -7,6 +7,10 @@ const HIRING_PROMISE =
   /\byou(?:'re| are) hired\b|\byou got the (?:job|role|position)\b|\bwe(?:'ll| will) (?:offer|hire)\b|\boffer you\b|\bguarantee\b|\byou(?:'ve| have) (?:been )?(?:selected|accepted)\b/i;
 const DATE_TIME =
   /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|june|july|august|september|october|november|december|tomorrow|tonight|next week)\b|\bmay \d|\b\d{1,2}(:\d{2})?\s?(am|pm)\b/i;
+// Past-tense claims of actions this tool cannot perform ("We have withdrawn your application"). A person may
+// do the thing before sending, so this is shown as a warning rather than blocking the draft.
+const CLAIMS_ACTION =
+  /\b(?:we|i)(?:\s+have|['\u2019]ve)\s+(?:already\s+|now\s+)?(?:withdrawn|cancel(?:l)?ed|updated|removed|deleted|scheduled|booked|rescheduled|forwarded|passed|sent|processed|escalated|flagged|replaced|corrected|fixed|attached|added|submitted|registered|reviewed|confirmed|arranged)\b|\b(?:your|the)\s+(?:application|interview|request|cv|resume|details|account|profile)\s+(?:has|have)\s+been\s+(?:withdrawn|cancel(?:l)?ed|updated|removed|deleted|rescheduled|booked|scheduled|replaced|corrected|submitted|processed)\b/i;
 const CONTACT = /\S+@\S+\.\S+|\+?\d[\d\s-]{8,}\d/;
 
 /**
@@ -20,6 +24,7 @@ export function checkDraft(text: string): { flags: DraftFlag[]; blocked: boolean
   if (HIRING_PROMISE.test(text)) flags.push("hiring_promise");
   if (DATE_TIME.test(text)) flags.push("date_time");
   if (CONTACT.test(text)) flags.push("contact_details");
+  if (CLAIMS_ACTION.test(text)) flags.push("claims_action");
   return { flags, blocked: flags.includes("money") || flags.includes("hiring_promise") };
 }
 

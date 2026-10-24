@@ -20,9 +20,9 @@ const llmReturning = (text: string, extra: Record<string, unknown> = {}): LlmCal
 
 describe("draftReply", () => {
   it("returns the model's draft and token usage", async () => {
-    const llm = llmReturning(JSON.stringify({ draft: "Thanks, I've passed this on." }));
+    const llm = llmReturning(JSON.stringify({ draft: "Thanks, I'll pass this on." }));
     const r = await draftReply(msg, cls(), llm, "SYS");
-    expect(r).toMatchObject({ draft: "Thanks, I've passed this on.", flags: [], blocked: false, usage: { inputTokens: 50, outputTokens: 30 } });
+    expect(r).toMatchObject({ draft: "Thanks, I'll pass this on.", flags: [], blocked: false, usage: { inputTokens: 50, outputTokens: 30 } });
     expect(llm).toHaveBeenCalledWith(expect.objectContaining({ system: "SYS", output: DRAFT_OUTPUT }));
   });
 
