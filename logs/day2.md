@@ -1,4 +1,4 @@
-# Day 2 — 2026-10-20
+# Day 2 — 2026-10-21
 
 > **Dating note.** This file was started 2026-10-20 and kept growing for four calendar days. Git dates: policy, tests and classify slice 10-20; open-model provider, draft stage, server and UI 10-21; first valid baseline and classify.v2 comparison 10-24. Work from 10-24 onward is logged in `day3.md`, so the day files follow the calendar. I did not notice the mismatch until the user asked whether we were already on Day 3 and 4; the log should have been split earlier.
 

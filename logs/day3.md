@@ -1,4 +1,4 @@
-# Day 3 — 2026-10-24
+# Day 3 — 2026-10-22
 ## Goal today
 Move from "does it work" to "make it fail on purpose": a held-out check on the prompt tuning, then an adversarial set (injection, multi-intent, Pidgin and other languages, noise, sensitive data). Record what breaks before fixing anything.
 

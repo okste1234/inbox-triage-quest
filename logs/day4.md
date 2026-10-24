@@ -1,4 +1,4 @@
-# Day 4 — 2026-10-24
+# Day 4 — 2026-10-23
 ## Goal today
 Fix what the Day 3 adversarial run broke, tests first, then re-run the same 26 messages and report before and after.
 
