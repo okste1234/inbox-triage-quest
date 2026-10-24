@@ -1,4 +1,4 @@
-import { applyPolicy, DEFAULT_CONFIDENCE_THRESHOLD } from "./policy.js";
+import { applyPolicy, DEFAULT_CONFIDENCE_THRESHOLD, isContentless } from "./policy.js";
 import type { LlmCall, LlmOutputSpec, Usage } from "./llm-types.js";
 import { INTENTS, ModelOutputSchema, type Classification, type Message } from "./schema.js";
 
@@ -71,6 +71,22 @@ export async function classifyMessage(
         injection_suspected: false,
         reasons: "blank message",
         escalation_reasons: ["blank"],
+      },
+      usage: none,
+    };
+  }
+
+  if (isContentless(msg.body)) {
+    return {
+      result: {
+        id: msg.id,
+        intent: "other",
+        secondary_intents: [],
+        confidence: 1,
+        needs_human: true,
+        injection_suspected: false,
+        reasons: "greeting only; nothing to answer",
+        escalation_reasons: ["contentless"],
       },
       usage: none,
     };

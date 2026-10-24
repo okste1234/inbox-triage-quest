@@ -1,0 +1,148 @@
+[
+  {
+    "id": "h001",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h002",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h003",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h004",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h005",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h006",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h007",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h008",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h009",
+    "intent": "complaint",
+    "secondary_intents": [],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h010",
+    "intent": "application_problem",
+    "secondary_intents": [
+      "complaint"
+    ],
+    "needs_human": true,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h011",
+    "intent": "status_check",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h012",
+    "intent": "reschedule_or_withdraw",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h013",
+    "intent": "compensation_question",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h014",
+    "intent": "application_problem",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h015",
+    "intent": "scheduling",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  },
+  {
+    "id": "h016",
+    "intent": "other",
+    "secondary_intents": [],
+    "needs_human": false,
+    "ideal_reply": "",
+    "notes": "holdout: written before classify.v3, to check it was not tuned on the main 51",
+    "labeled_by": "ai"
+  }
+]

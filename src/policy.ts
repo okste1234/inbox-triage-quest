@@ -23,3 +23,11 @@ export function applyPolicy(
 
   return { needs_human: reasons.length > 0, escalation_reasons: reasons };
 }
+
+const GREETING_WORDS = new Set(["hi", "hello", "hey", "hiya", "good", "morning", "afternoon", "evening", "there", "greetings", "dear", "sir", "madam", "team", "all", "everyone"]);
+
+/** True for a message that is only a greeting: there is nothing to answer, so a person decides what to do. */
+export function isContentless(body: string): boolean {
+  const words = body.toLowerCase().replace(/[^a-z\s]/g, " ").split(/\s+/).filter(Boolean);
+  return words.length > 0 && words.length <= 4 && words.every((w) => GREETING_WORDS.has(w));
+}

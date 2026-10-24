@@ -114,6 +114,26 @@ describe("makeOpenAICompatibleCall: rate limits", () => {
   });
 });
 
+describe("makeOpenAICompatibleCall: malformed JSON from the provider", () => {
+  const badJson = () => new Response('{"error":{"message":"Failed to generate JSON.","code":"json_validate_failed"}}', { status: 400 });
+
+  it("retries json_validate_failed (a bad sample, not a bad request) and then succeeds", async () => {
+    const fn = vi.fn().mockResolvedValueOnce(badJson()).mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async () => {} });
+    expect((await call({ system: "s", user: "u", output })).text).toBe("{}");
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+
+  it("gives up after 2 such retries", async () => {
+    const fn = vi.fn(async (..._a: unknown[]) => badJson());
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async () => {} });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/json_validate_failed/);
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe("resolveProvider", () => {
   it("defaults to anthropic", () => {
     expect(resolveProvider({})).toBe("anthropic");

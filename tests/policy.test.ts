@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyPolicy } from "../src/policy.js";
+import { applyPolicy, isContentless } from "../src/policy.js";
 import type { ModelOutput } from "../src/schema.js";
 
 const base: ModelOutput = {
@@ -53,5 +53,17 @@ describe("applyPolicy", () => {
   it("keeps the model's own judgment as a separate reason", () => {
     const r = applyPolicy({ ...base, needs_human: true }, "x");
     expect(r).toEqual({ needs_human: true, escalation_reasons: ["model_judgment"] });
+  });
+});
+
+describe("isContentless", () => {
+  it("is true for a bare greeting, in any case or punctuation", () => {
+    for (const t of ["Hello", "hey", "Hi!", "  Good morning.  ", "Hello,", "Hi there", "Greetings"]) expect(isContentless(t), t).toBe(true);
+  });
+  it("is false once there is anything to answer", () => {
+    for (const t of ["Hello, any update?", "Hi, I applied last week", "Thanks!", "Good morning, can we reschedule?"]) expect(isContentless(t), t).toBe(false);
+  });
+  it("is false for an empty string (blank is handled separately)", () => {
+    expect(isContentless("")).toBe(false);
   });
 });

@@ -42,6 +42,8 @@ export function resolveModel(env: Env = process.env): string {
   throw new Error("MODEL is required when PROVIDER=openai-compatible (for example openai/gpt-oss-20b on Groq)");
 }
 
+const MAX_BAD_JSON_RETRIES = 2;
+
 export interface OpenAICompatibleConfig {
   baseUrl: string;
   model: string;
@@ -85,12 +87,19 @@ export function makeOpenAICompatibleCall({
       ],
     });
     let res: Response;
-    for (let attempt = 0; ; attempt++) {
+    let rateLimitRetries = 0;
+    let badJsonRetries = 0;
+    for (;;) {
       res = await fetch(url, { method: "POST", headers, body });
       if (res.ok) break;
       const text = await res.text();
-      if (res.status !== 429 || attempt >= maxRetries) throw new Error(`${res.status} ${text.slice(0, 200)}`);
-      await sleep(retryDelayMs(res, text, attempt));
+      // Providers that validate JSON mode reject an occasional malformed sample; resampling usually works.
+      if (res.status === 400 && text.includes("json_validate_failed") && badJsonRetries < MAX_BAD_JSON_RETRIES) {
+        badJsonRetries++;
+        continue;
+      }
+      if (res.status !== 429 || rateLimitRetries >= maxRetries) throw new Error(`${res.status} ${text.slice(0, 200)}`);
+      await sleep(retryDelayMs(res, text, rateLimitRetries++));
     }
 
     const data = (await res.json()) as {

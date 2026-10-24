@@ -1,0 +1,114 @@
+[
+  {
+    "id": "h001",
+    "from_name": "Rahul Verma",
+    "from_email": "rahul.verma@example.com",
+    "subject": "Running late",
+    "body": "Hi, my train got cancelled and I'll only reach the office around 2:30 but the interview starts at 2. Can someone let the panel know?"
+  },
+  {
+    "id": "h002",
+    "from_name": "Chiamaka Obi",
+    "from_email": "chiamaka.obi@example.com",
+    "subject": "Can't do this morning",
+    "body": "I just woke up with a fever and can't do the video call at 10 this morning. Please advise as soon as you can."
+  },
+  {
+    "id": "h003",
+    "from_name": "Tom Bennett",
+    "from_email": "tom.bennett@example.com",
+    "subject": "Joining by phone",
+    "body": "Heads up, my internet is down right now so I'll be joining the call in 5 minutes from my phone. Hope that's okay."
+  },
+  {
+    "id": "h004",
+    "from_name": "Alina Petrova",
+    "from_email": "alina.petrova@example.com",
+    "subject": "Offer letter",
+    "body": "Thanks so much for the offer letter! Before I sign, could you send the final contract with the salary breakdown spelled out? I'd also like to talk about the bonus."
+  },
+  {
+    "id": "h005",
+    "from_name": "Segun Adebayo",
+    "from_email": "segun.adebayo@example.com",
+    "subject": "Re: Offer",
+    "body": "I got your offer. The base is lower than I expected. Is there any room to negotiate?"
+  },
+  {
+    "id": "h006",
+    "from_name": "Maria Lopez",
+    "from_email": "maria.lopez@example.com",
+    "subject": "Start date",
+    "body": "Great news on the offer! Could I push my start date to the first of next month?"
+  },
+  {
+    "id": "h007",
+    "from_name": "Yusuf Ibrahim",
+    "from_email": "yusuf.ibrahim@example.com",
+    "subject": "",
+    "body": "hey"
+  },
+  {
+    "id": "h008",
+    "from_name": "Karen White",
+    "from_email": "karen.white@example.com",
+    "subject": "",
+    "body": "Good morning"
+  },
+  {
+    "id": "h009",
+    "from_name": "Ngozi Eze",
+    "from_email": "ngozi.eze@example.com",
+    "subject": "No replies",
+    "body": "Nobody has replied to my last two emails. I'm starting to think this company doesn't care about candidates at all."
+  },
+  {
+    "id": "h010",
+    "from_name": "Dmitri Ivanov",
+    "from_email": "dmitri.ivanov@example.com",
+    "subject": "Assessment crashed",
+    "body": "The assessment platform crashed halfway and I lost all my answers, and the support email bounced. This has been a terrible experience."
+  },
+  {
+    "id": "h011",
+    "from_name": "Fiona Gallagher",
+    "from_email": "fiona.gallagher@example.com",
+    "subject": "After my interview",
+    "body": "I still haven't heard anything after my interview two weeks ago. Can you tell me where things are?"
+  },
+  {
+    "id": "h012",
+    "from_name": "Ahmed Salah",
+    "from_email": "ahmed.salah@example.com",
+    "subject": "Withdrawal",
+    "body": "I've decided to take another role, so please withdraw my application. Thanks for the opportunity."
+  },
+  {
+    "id": "h013",
+    "from_name": "Lola Martins",
+    "from_email": "lola.martins@example.com",
+    "subject": "Benefits",
+    "body": "Could you tell me what the benefits package looks like for this position?"
+  },
+  {
+    "id": "h014",
+    "from_name": "Peter Jones",
+    "from_email": "peter.jones@example.com",
+    "subject": "CV upload",
+    "body": "My CV upload keeps timing out on the careers page. Is there an email address I can send it to instead?"
+  },
+  {
+    "id": "h015",
+    "from_name": "Sara Khan",
+    "from_email": "sara.khan@example.com",
+    "subject": "Second interview",
+    "body": "I'm available next Tuesday or Wednesday afternoon for the second interview. What suits the team?"
+  },
+  {
+    "id": "h016",
+    "from_name": "Joy Nwachukwu",
+    "from_email": "joy.nwachukwu@example.com",
+    "subject": "Thank you",
+    "body": "Thanks again for your time yesterday, I really enjoyed meeting everyone."
+  }
+]

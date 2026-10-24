@@ -1,5 +1,5 @@
 // Runs the classifier over data/sample_messages.json and scores it against data/labels.json.
-//   npm run eval -- [--prompt classify.v1] [--out evals/results/day2_baseline.json] [--concurrency 5] [--limit N]
+//   npm run eval -- [--prompt classify.v1] [--out evals/results/day2_baseline.json] [--concurrency 5] [--limit N] [--messages file] [--labels file]
 // --limit scores only the first N messages: a cheap smoke test, not a baseline.
 // Uses a live model (Anthropic API, or any OpenAI-compatible endpoint such as local Ollama; see .env.example). Cost and latency are measured, not estimated.
 import "dotenv/config";
@@ -35,10 +35,10 @@ async function main(): Promise<void> {
   const model = resolveModel();
 
   const system = readFileSync(`prompts/${prompt}.md`, "utf8");
-  const allMessages = z.array(MessageSchema).parse(JSON.parse(readFileSync("data/sample_messages.json", "utf8")));
+  const allMessages = z.array(MessageSchema).parse(JSON.parse(readFileSync(arg("messages", "data/sample_messages.json"), "utf8")));
   const messages = limit > 0 ? allMessages.slice(0, limit) : allMessages;
   const ids = new Set(messages.map((m) => m.id));
-  const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync("data/labels.json", "utf8"))).filter((l) => ids.has(l.id));
+  const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync(arg("labels", "data/labels.json"), "utf8"))).filter((l) => ids.has(l.id));
   const llm = makeLlmCall();
 
   const results: Classification[] = new Array(messages.length);

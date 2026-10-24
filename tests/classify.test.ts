@@ -69,6 +69,14 @@ describe("classifyMessage", () => {
     expect(usage).toEqual({ inputTokens: 0, outputTokens: 0 });
   });
 
+  it("does not call the model for a bare greeting, and escalates it", async () => {
+    const llm = reply(good);
+    const { result, usage } = await classifyMessage(msg("Hello"), llm, "S");
+    expect(llm).not.toHaveBeenCalled();
+    expect(result).toMatchObject({ needs_human: true, escalation_reasons: ["contentless"], intent: "other" });
+    expect(usage).toEqual({ inputTokens: 0, outputTokens: 0 });
+  });
+
   it("falls back to needs_human when the output is not JSON", async () => {
     const llm: LlmCall = async () => ({ text: "sure! it's a status check", stopReason: "end_turn", inputTokens: 1, outputTokens: 1 });
     const { result } = await classifyMessage(msg("x"), llm, "S");

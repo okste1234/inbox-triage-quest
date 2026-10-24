@@ -58,6 +58,7 @@ export type EscalationReason =
   | "injection_suspected"
   | "low_confidence"
   | "blank"
+  | "contentless"
   | "model_judgment"
   | "draft_blocked"
   | "error";
