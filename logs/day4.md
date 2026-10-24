@@ -92,10 +92,10 @@ Three repeats of classify.v3 on the 51 messages, same code, same model (`evals/r
 - Everything runs on one free-tier open model, one run each.
 
 ## Habit I dropped / caught myself in
-(Fill in. Candidates: wrote the failing test before every fix this time; stopped trusting a plausible number when its error count was 100%; proved a defense with a worst-case simulation instead of waiting for the live model.)
+**Dropped:** trusting a plausible number. When every call in a run failed, the guard refused to score it, and I read the failures instead of the headline. Also wrote the failing test before every fix. **Slipped back:** accepting output without checking: the AI reported the README as updated when the write had actually failed; I only found it because I asked to deal with the issues first ("Can't we deal with the issues first?").
 
 ## AI usage: what I prompted, what was wrong, how I fixed it
-(Fill in with your own prompts. AI-side mistakes today: no timeout on HTTP calls; retry logic that multiplied requests and ate the daily quota; underestimating request volume by about 4x; trusting response headers over the dashboard.)
+**My prompts:** "Yes. Day 4: fix the adversarial failures tests-first (injection patterns, silent-drop invariant, sensitive-data redaction and escalation), re-run the adversarial set, and log before and after."; "We have made 831 API Calls according to the dashboard though"; "Can't we deal with the issues first?"; "Measure the run-to-run noise...". **What the AI got wrong:** no timeout on HTTP calls; retry logic that multiplied requests and ate the daily quota; an estimate of about 200 requests when the dashboard showed 831; trusting response headers over the dashboard; claiming the README was updated when the write had failed; and overstating run-to-run noise (retracted after measuring).
 
 ## Tomorrow
 Deploy the demo, write the README and the unlearning note, record the videos. If time allows: repeat each prompt 3 times and report the spread, and write a fresh dialect set that was not written alongside the prompt.

@@ -72,10 +72,10 @@ Also added: a retry when Groq rejects a malformed JSON reply (`json_validate_fai
 **What held:** 7 of 8 injections were escalated, and no injection produced a draft. Multi-intent was 3/3. Benign near-duplicates were 4/4, so answers were consistent. No draft contained a forbidden promise or amount.
 
 ## Habit I dropped / caught myself in
-(Fill in. Candidate: I reacted to a failed result (v3 on the held-out set) with a code rule instead of another round of prompt tweaking. Slip to record: I added that rule after seeing the held-out failures, which contaminated that set.)
+**Dropped:** accepting the first plan. I asked "Aren't we on Day 3 and 4 already with these test and eval?" and found that raising the load had not actually been done, so the adversarial set came before more tuning. **Slipped back:** after reading the held-out failures we added the urgency rule, which contaminated that part of the held-out set. I recorded it as a caveat instead of hiding it.
 
 ## AI usage: what I prompted, what was wrong, how I fixed it
-(Fill in with your own prompts. AI-side mistakes today: a first eval run with a retired model name produced a plausible-looking 13.7% accuracy that was really the fallback path; fixed by refusing to score runs where more than 20% of calls fail. v2 was described as "shorter" and was only 15% shorter, and v3 ended up longer. A log-writing command also mangled this file once because of unquoted shell backticks; caught from the error output and rewritten.)
+**My prompts:** "Aren't we on Day 3 and 4 already with these test and eval?"; "don't you think we should reduce our messages from 51, since the token supported on free tier is not really much" (the AI argued to keep all 51 and cut tokens per call instead; I accepted that). **What the AI got wrong:** a first eval run with a retired model name produced a plausible-looking 13.7% accuracy that was really the fallback path (caught and fixed with an invalid-run guard); v2 was called "shorter" and was only 15% shorter; a log-writing command was mangled once by unquoted shell backticks and rewritten.
 
 ## What I didn't fix (yet)
 Everything in the "What broke" list above. This is the Day 4 list, to be re-run for before and after numbers. Unverified: all results are from one free-tier open model, one run each.

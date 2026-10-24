@@ -10,7 +10,7 @@ Thin end-to-end slice. First step: a ground-truth set (about 50 synthetic messag
 - First-pass check: 0 disagreements between those AI labels and the AI's own hidden guesses. This is the same model agreeing with itself, so it proves nothing. (My own labels later disagreed with the AI's on 1 intent and 5 needs_human; see below.)
 
 ## Habit I dropped / caught myself in
-(fill in honestly. Slip to record: I delegated the labeling, which was the one step meant to stay human. e.g. "Wanted to write the message set by hand; had AI generate it and spent my time on labeling, which is the part only I can do.")
+**Dropped:** wrote `intent.md` and `directive.md` first and let the AI generate the test data and the labeling tool, instead of hand-writing them. **Slipped back:** I asked the AI to do the labeling ("Just do the labelling for me in terminal"), which was the one human step. When I asked "would it be better if I ran the labelling myself?" I redid it, but with the AI's labels in view, so 45 of 51 labels are `human_ai_assisted`, not independent.
 
 ## AI usage: what I prompted, what was wrong, how I fixed it
 - Piped-stdin smoke test of the labeler first failed ("unsettled top-level await"). Cause: readline/promises loses prompts when piped input hits EOF immediately; not a bug for interactive use. Re-tested with paced input and it worked. Typecheck also failed at first (TypeScript 7 does not auto-include @types/node); fixed with `"types": ["node"]` in tsconfig.

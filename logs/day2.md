@@ -13,10 +13,10 @@ Evals before features: settle what `needs_human` means, write the scoring and cl
 - **Eval runner:** `npm run eval` scores intent accuracy (strict and lenient for multi-intent), needs_human precision/recall, accuracy split by label provenance, cost and p50/p95 latency.
 
 ## Habit I dropped / caught myself in
-(fill in. Candidates: wrote the tests before the code; stopped to define `needs_human` before measuring it instead of tuning the prompt until numbers looked fine.)
+**Dropped:** tests before code (29 tests failed to load before any classifier existed), and defining `needs_human` before measuring it, instead of tuning the prompt until the numbers looked fine. **Slipped back:** I asked for something deployable ("Something I can deploy.. Remember the requirements for submission includes live demo") while there was still no real accuracy number, pulling polish ahead of measurement. It was the right call for the submission, but a slip against the habit I was trying to build.
 
 ## AI usage: what I prompted, what was wrong, how I fixed it
-(fill in with the prompts you actually gave. What the AI got wrong today: its Day 1 label for m045 contradicted its own note; `ModelOutput` first allowed confidence outside 0-1 in the JSON schema, so zod does that check after parsing.)
+**My prompts:** "Start Day 2: directive v2 first, then eval script and tests, then the classify slice."; "give me a free key I can use.. Any open model"; "Something I can deploy..". **What the AI got wrong:** its Day 1 label for m045 contradicted its own note; the first draft of the model-output schema allowed a confidence outside 0 to 1 (zod now checks it); the first deploy had no HTTP timeout. **How I responded:** reviewed the label disagreements, decided the `needs_human` policy myself, and had the AI write tests before each fix.
 
 ## What broke (with numbers)
 - **First eval attempt was invalid.** I used `llama-3.1-8b-instant` on Groq; every one of the 51 calls returned `404 model_not_found`. The script still printed "13.7% accuracy" because failures fall back to `other` + `needs_human`. That number measured the fallback path, not the model. I deleted the result and made the runner refuse to report any run where more than 20% of calls fail (`runHealth`, tests first).
