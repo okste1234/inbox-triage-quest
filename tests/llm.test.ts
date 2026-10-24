@@ -156,6 +156,29 @@ describe("makeOpenAICompatibleCall: hung connections", () => {
   });
 });
 
+describe("makeOpenAICompatibleCall: network blips", () => {
+  const netFail = () => Promise.reject(Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNRESET" } }));
+
+  it("retries a connection failure with backoff and then succeeds", async () => {
+    const fn = vi.fn().mockImplementationOnce(netFail).mockImplementationOnce(netFail).mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const sleeps: number[] = [];
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async (ms) => void sleeps.push(ms) });
+    expect((await call({ system: "s", user: "u", output })).text).toBe("{}");
+    expect(fn).toHaveBeenCalledTimes(3);
+    expect(sleeps).toHaveLength(2);
+    expect(sleeps[1]).toBeGreaterThan(sleeps[0]);
+  });
+
+  it("gives up after the retry budget and says it was a network failure", async () => {
+    const fn = vi.fn(netFail);
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", maxNetworkRetries: 2, sleep: async () => {} });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/network/i);
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+});
+
 describe("resolveProvider", () => {
   it("defaults to anthropic", () => {
     expect(resolveProvider({})).toBe("anthropic");

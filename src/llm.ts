@@ -53,6 +53,8 @@ export interface OpenAICompatibleConfig {
   /** Per-attempt limit. Without one, a stalled connection freezes the caller forever. */
   timeoutMs?: number;
   maxTimeoutRetries?: number;
+  /** Retries for connection failures (DNS, reset, offline), with exponential backoff. */
+  maxNetworkRetries?: number;
   /** Injected in tests so they do not really wait. */
   sleep?: (ms: number) => Promise<void>;
 }
@@ -74,6 +76,7 @@ export function makeOpenAICompatibleCall({
   maxRetries = 6,
   timeoutMs = 60_000,
   maxTimeoutRetries = 2,
+  maxNetworkRetries = 4,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
 }: OpenAICompatibleConfig): LlmCall {
   const url = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
@@ -95,12 +98,19 @@ export function makeOpenAICompatibleCall({
     let rateLimitRetries = 0;
     let badJsonRetries = 0;
     let timeoutRetries = 0;
+    let networkRetries = 0;
     for (;;) {
       try {
         res = await fetch(url, { method: "POST", headers, body, signal: AbortSignal.timeout(timeoutMs) });
       } catch (err) {
         const timedOut = err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
-        if (!timedOut) throw err;
+        if (!timedOut) {
+          if (err instanceof TypeError && networkRetries < maxNetworkRetries) {
+            await sleep(Math.min(1000 * 2 ** networkRetries++, 15_000));
+            continue;
+          }
+          throw err instanceof TypeError ? new Error(`network failure: ${err.message}`) : err;
+        }
         if (timeoutRetries++ < maxTimeoutRetries) continue;
         throw new Error(`request timed out after ${timeoutMs}ms`);
       }
