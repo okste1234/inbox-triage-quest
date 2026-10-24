@@ -134,6 +134,28 @@ describe("makeOpenAICompatibleCall: malformed JSON from the provider", () => {
   });
 });
 
+describe("makeOpenAICompatibleCall: hung connections", () => {
+  /** A fetch that never answers on its own, but honors the abort signal like the real one. */
+  const hang = (_url: unknown, init?: RequestInit) =>
+    new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => reject(new DOMException("timed out", "TimeoutError")));
+    });
+
+  it("gives up on a call that never answers, instead of waiting forever", async () => {
+    vi.stubGlobal("fetch", vi.fn(hang));
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", timeoutMs: 20, maxTimeoutRetries: 0 });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/timed out/i);
+  });
+
+  it("retries a timed-out call and succeeds on the next attempt", async () => {
+    const fn = vi.fn().mockImplementationOnce(hang).mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", timeoutMs: 20, sleep: async () => {} });
+    expect((await call({ system: "s", user: "u", output })).text).toBe("{}");
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+});
+
 describe("resolveProvider", () => {
   it("defaults to anthropic", () => {
     expect(resolveProvider({})).toBe("anthropic");

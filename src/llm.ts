@@ -50,6 +50,9 @@ export interface OpenAICompatibleConfig {
   apiKey?: string;
   /** Retries after a 429 (rate limit). Free tiers cap tokens per minute, so waiting is normal. */
   maxRetries?: number;
+  /** Per-attempt limit. Without one, a stalled connection freezes the caller forever. */
+  timeoutMs?: number;
+  maxTimeoutRetries?: number;
   /** Injected in tests so they do not really wait. */
   sleep?: (ms: number) => Promise<void>;
 }
@@ -69,6 +72,8 @@ export function makeOpenAICompatibleCall({
   model,
   apiKey,
   maxRetries = 6,
+  timeoutMs = 60_000,
+  maxTimeoutRetries = 2,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
 }: OpenAICompatibleConfig): LlmCall {
   const url = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
@@ -89,8 +94,16 @@ export function makeOpenAICompatibleCall({
     let res: Response;
     let rateLimitRetries = 0;
     let badJsonRetries = 0;
+    let timeoutRetries = 0;
     for (;;) {
-      res = await fetch(url, { method: "POST", headers, body });
+      try {
+        res = await fetch(url, { method: "POST", headers, body, signal: AbortSignal.timeout(timeoutMs) });
+      } catch (err) {
+        const timedOut = err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
+        if (!timedOut) throw err;
+        if (timeoutRetries++ < maxTimeoutRetries) continue;
+        throw new Error(`request timed out after ${timeoutMs}ms`);
+      }
       if (res.ok) break;
       const text = await res.text();
       // Providers that validate JSON mode reject an occasional malformed sample; resampling usually works.
