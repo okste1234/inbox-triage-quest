@@ -7,7 +7,8 @@ import { createApp } from "./server.js";
 const port = Number(process.env.PORT || 3000);
 const classifyVersion = process.env.CLASSIFY_PROMPT || "classify.v3";
 const classifySystem = readFileSync(new URL(`../prompts/${classifyVersion}.md`, import.meta.url), "utf8");
-const draftSystem = readFileSync(new URL("../prompts/draft.v1.md", import.meta.url), "utf8");
+const draftVersion = process.env.DRAFT_PROMPT || "draft.v2";
+const draftSystem = readFileSync(new URL(`../prompts/${draftVersion}.md`, import.meta.url), "utf8");
 
 createApp({
   llm: makeLlmCall(),
@@ -16,5 +17,5 @@ createApp({
   maxMessagesPerHour: Number(process.env.MAX_MESSAGES_PER_HOUR || 60),
   maxMessagesPerDay: Number(process.env.MAX_MESSAGES_PER_DAY || 150),
 }).listen(port, () => {
-  console.log(`Inbox triage on http://localhost:${port}  (${resolveProvider()}, ${resolveModel()}, ${classifyVersion})`);
+  console.log(`Inbox triage on http://localhost:${port}  (${resolveProvider()}, ${resolveModel()}, ${classifyVersion}, ${draftVersion})`);
 });

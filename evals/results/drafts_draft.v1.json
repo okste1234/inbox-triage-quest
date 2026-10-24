@@ -1,0 +1,433 @@
+{
+  "prompt": "draft.v1",
+  "model": "openai/gpt-oss-20b",
+  "ran_at": "2026-10-24T10:01:24.853Z",
+  "summary": {
+    "n": 37,
+    "drafted": 35,
+    "empty": 1,
+    "blocked": 0,
+    "errors": 1,
+    "flagCounts": {
+      "claims_action": 16,
+      "date_time": 3
+    },
+    "flagRates": {
+      "claims_action": 0.45714285714285713,
+      "date_time": 0.08571428571428572
+    },
+    "avgWords": 18.228571428571428,
+    "maxWords": 41
+  },
+  "rows": [
+    {
+      "id": "m001",
+      "draft": "I’ve forwarded your question to the hiring team and will follow up with an update soon.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 450,
+        "outputTokens": 181
+      }
+    },
+    {
+      "id": "m002",
+      "draft": "Hi Liam, thanks for reaching out. I’ve forwarded your request to the hiring team and will follow up with an update soon.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 452,
+        "outputTokens": 128
+      }
+    },
+    {
+      "id": "m003",
+      "draft": "I’ve forwarded your question to the hiring team and will get back to you once I have an update.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 446,
+        "outputTokens": 150
+      }
+    },
+    {
+      "id": "m004",
+      "draft": "I’ve forwarded your question to the hiring team and will follow up as soon as I have an update.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 461,
+        "outputTokens": 155
+      }
+    },
+    {
+      "id": "m005",
+      "draft": "Thank you for sending your take-home submission. We have received it and will review it shortly.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 442,
+        "outputTokens": 215
+      }
+    },
+    {
+      "id": "m006",
+      "draft": "Thanks for reaching out. I’ve forwarded your question to the hiring team and will follow up once I have an update.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 445,
+        "outputTokens": 288
+      }
+    },
+    {
+      "id": "m007",
+      "draft": "Thank you for reaching out. I’ve forwarded your question to the hiring team and will get back to you once I have an update.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 449,
+        "outputTokens": 191
+      }
+    },
+    {
+      "id": "m008",
+      "draft": "I have forwarded your request to the hiring team and will follow up shortly.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 430,
+        "outputTokens": 121
+      }
+    },
+    {
+      "id": "m009",
+      "draft": "Noted your availability on Thursday or Friday afternoon. We'll confirm a time shortly.",
+      "flags": [
+        "date_time"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 447,
+        "outputTokens": 291
+      }
+    },
+    {
+      "id": "m010",
+      "draft": "We understand your situation and will check our team's availability for a weekend interview. We'll get back to you shortly.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 444,
+        "outputTokens": 250
+      }
+    },
+    {
+      "id": "m011",
+      "draft": "The interview will be conducted via Zoom and will last approximately 45 minutes.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 445,
+        "outputTokens": 216
+      }
+    },
+    {
+      "id": "m012",
+      "draft": "We will coordinate and send interview times that work for Lagos (WAT).",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 444,
+        "outputTokens": 262
+      }
+    },
+    {
+      "id": "m013",
+      "draft": "Sure, I’ll send the calendar invite shortly. Noted that you didn’t receive it in your inbox or spam.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 446,
+        "outputTokens": 114
+      }
+    },
+    {
+      "id": "m014",
+      "draft": "Please share your availability and I will coordinate a slot.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 438,
+        "outputTokens": 261
+      }
+    },
+    {
+      "id": "m015",
+      "draft": "I’ve noted your conflict and will coordinate a new interview time next week. I’ll follow up shortly.",
+      "flags": [
+        "date_time"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 449,
+        "outputTokens": 246
+      }
+    },
+    {
+      "id": "m016",
+      "draft": "Thank you for letting us know. We have noted your withdrawal and wish you the best in your new role.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 448,
+        "outputTokens": 130
+      }
+    },
+    {
+      "id": "m018",
+      "draft": "We have noted your request and will remove you from consideration. Thank you for letting us know.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 440,
+        "outputTokens": 119
+      }
+    },
+    {
+      "id": "m020",
+      "draft": "We will reschedule the technical round for next week.",
+      "flags": [
+        "date_time"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 446,
+        "outputTokens": 129
+      }
+    },
+    {
+      "id": "m021",
+      "draft": "Thank you for letting us know. We’ve noted your decision to withdraw from the application process. If you have any questions or would like to explore other opportunities in the future, feel free to reach out. Wishing you all the best.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 447,
+        "outputTokens": 200
+      }
+    },
+    {
+      "id": "m022",
+      "draft": "I have forwarded your question to the appropriate team member and will get back to you shortly.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 431,
+        "outputTokens": 138
+      }
+    },
+    {
+      "id": "m023",
+      "draft": "I have forwarded your question to the appropriate team member and will get back to you shortly.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 440,
+        "outputTokens": 148
+      }
+    },
+    {
+      "id": "m025",
+      "draft": "I’ve forwarded your question to the hiring team and will get back to you with details.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 438,
+        "outputTokens": 184
+      }
+    },
+    {
+      "id": "m026",
+      "draft": "I have forwarded your question to the appropriate team member and will get back to you shortly.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 442,
+        "outputTokens": 134
+      }
+    },
+    {
+      "id": "m027",
+      "draft": "I have forwarded your question to the appropriate team member and will get back to you with details.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 434,
+        "outputTokens": 139
+      }
+    },
+    {
+      "id": "m029",
+      "draft": "Thank you for letting us know. I've forwarded this to our technical support team and will keep you updated.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 444,
+        "outputTokens": 180
+      }
+    },
+    {
+      "id": "m030",
+      "draft": "I’ve forwarded your request to the recruiting team and will let you know how to update your application.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 437,
+        "outputTokens": 152
+      }
+    },
+    {
+      "id": "m031",
+      "draft": "Thank you for reaching out. I will check on the status of your application and get back to you shortly.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 440,
+        "outputTokens": 306
+      }
+    },
+    {
+      "id": "m032",
+      "draft": "You can update your profile by logging into your account and editing your personal details. If you need assistance, let us know.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 455,
+        "outputTokens": 377
+      }
+    },
+    {
+      "id": "m033",
+      "draft": "Sure, I've sent a new assessment link to your email. Let me know if you have any trouble accessing it.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 447,
+        "outputTokens": 213
+      }
+    },
+    {
+      "id": "m034",
+      "draft": "We have noted your duplicate application and will remove the extra submission. Let us know if you need anything else.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 438,
+        "outputTokens": 153
+      }
+    },
+    {
+      "id": "m035",
+      "draft": "You can attach the cover letter to a reply to this email or upload it in the application portal. Let us know once you’ve done so, and we’ll add it to your application.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 440,
+        "outputTokens": 329
+      }
+    },
+    {
+      "id": "m042",
+      "draft": "Thank you for your time and interest. We appreciate your enthusiasm.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 434,
+        "outputTokens": 206
+      }
+    },
+    {
+      "id": "m043",
+      "draft": null,
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 0,
+        "outputTokens": 0
+      },
+      "error": "api error: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m5pc6vdbehg9885dpthf7yda` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7647, Requ"
+    },
+    {
+      "id": "m044",
+      "draft": "Yes, we offer internships for CS students. Could you share your area of interest and availability? We’ll provide more details.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 438,
+        "outputTokens": 183
+      }
+    },
+    {
+      "id": "m045",
+      "draft": "I will check the address and get back to you shortly.",
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 441,
+        "outputTokens": 450
+      }
+    },
+    {
+      "id": "m046",
+      "draft": null,
+      "flags": [],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 447,
+        "outputTokens": 69
+      }
+    },
+    {
+      "id": "m047",
+      "draft": "I have forwarded your request to our hiring team and will get back to you with feedback soon.",
+      "flags": [
+        "claims_action"
+      ],
+      "blocked": false,
+      "usage": {
+        "inputTokens": 437,
+        "outputTokens": 153
+      }
+    }
+  ]
+}
