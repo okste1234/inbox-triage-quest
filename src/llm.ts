@@ -58,6 +58,8 @@ export interface OpenAICompatibleConfig {
   maxTimeoutRetries?: number;
   /** Retries for connection failures (DNS, reset, offline), with exponential backoff. */
   maxNetworkRetries?: number;
+  /** A rate-limit wait longer than this (a daily limit, not a per-minute one) is not worth sleeping through: fail fast. */
+  maxRetryAfterMs?: number;
   /** Total HTTP requests per call across all retry kinds. */
   maxAttempts?: number;
   /** Injected in tests so they do not really wait. */
@@ -83,6 +85,7 @@ export function makeOpenAICompatibleCall({
   maxTimeoutRetries = 2,
   maxNetworkRetries = 4,
   maxAttempts = 5,
+  maxRetryAfterMs = 30_000,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
 }: OpenAICompatibleConfig): LlmCall {
   const url = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
@@ -137,7 +140,9 @@ export function makeOpenAICompatibleCall({
         continue;
       }
       if (res.status !== 429 || rateLimitRetries >= maxRetries) throw lastError;
-      await sleep(retryDelayMs(res, text, rateLimitRetries++));
+      const waitMs = retryDelayMs(res, text, rateLimitRetries++);
+      if (waitMs > maxRetryAfterMs) throw lastError;
+      await sleep(waitMs);
     }
 
     const data = (await res.json()) as {

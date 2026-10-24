@@ -114,6 +114,27 @@ describe("makeOpenAICompatibleCall: rate limits", () => {
   });
 });
 
+describe("makeOpenAICompatibleCall: long rate-limit waits", () => {
+  it("fails fast instead of sleeping when the provider says to retry after a long time (daily limit)", async () => {
+    const fn = vi.fn(async (..._a: unknown[]) => new Response('{"error":{"message":"Rate limit reached ... requests per day (RPD)"}}', { status: 429, headers: { "retry-after": "28800" } }));
+    vi.stubGlobal("fetch", fn);
+    const sleeps: number[] = [];
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async (ms) => void sleeps.push(ms) });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/429/);
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(sleeps).toEqual([]);
+  });
+
+  it("still waits for short per-minute limits", async () => {
+    const fn = vi.fn().mockResolvedValueOnce(new Response("{}", { status: 429, headers: { "retry-after": "12" } })).mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const sleeps: number[] = [];
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async (ms) => void sleeps.push(ms) });
+    await call({ system: "s", user: "u", output });
+    expect(sleeps).toEqual([12000]);
+  });
+});
+
 describe("makeOpenAICompatibleCall: malformed JSON from the provider", () => {
   const badJson = () => new Response('{"error":{"message":"Failed to generate JSON.","code":"json_validate_failed"}}', { status: 400 });
 
