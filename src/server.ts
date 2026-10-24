@@ -11,6 +11,8 @@ export interface AppDeps {
   draftSystem: string;
   /** Messages one client may triage per hour. Protects the model key behind a public URL. */
   maxMessagesPerHour?: number;
+  /** Messages the whole server will triage per rolling 24 h, whoever asks. Keeps the model key's free quota safe. */
+  maxMessagesPerDay?: number;
 }
 
 const MAX_BODY_BYTES = 100_000;
@@ -62,6 +64,8 @@ function scrub(item: TriageItem): TriageItem {
 
 export function createApp(deps: AppDeps): Server {
   const limit = deps.maxMessagesPerHour ?? 60;
+  const dayLimit = deps.maxMessagesPerDay ?? 150;
+  const day = { start: Date.now(), count: 0 };
   const usage = new Map<string, { start: number; count: number }>();
 
   function allow(ip: string, n: number): boolean {
@@ -99,11 +103,17 @@ export function createApp(deps: AppDeps): Server {
           return send(res, 400, { error: `send 1-${MAX_MESSAGES} messages, body up to 2000 characters each` });
         }
 
+        if (Date.now() - day.start > 24 * HOUR_MS) Object.assign(day, { start: Date.now(), count: 0 });
+        if (day.count + parsed.data.messages.length > dayLimit) {
+          return send(res, 429, { error: "The demo has used its daily budget. Please try again tomorrow." });
+        }
+
         const ip = String(req.headers["x-forwarded-for"] ?? req.socket.remoteAddress ?? "unknown").split(",")[0].trim();
         if (!allow(ip, parsed.data.messages.length)) {
           return send(res, 429, { error: `Demo limit reached (${limit} messages per hour). Try again later.` });
         }
 
+        day.count += parsed.data.messages.length;
         const messages: Message[] = parsed.data.messages.map((m, i) => ({
           id: `u${String(i + 1).padStart(3, "0")}`,
           from_name: m.from_name ?? "Candidate",

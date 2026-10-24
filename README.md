@@ -32,7 +32,7 @@ npm start        # http://localhost:3000, a review queue: approve / edit / rejec
 ```
 The page groups messages by intent (messages that need a person come first), shows confidence and why something was escalated, and lets the reviewer edit every draft. Approve only copies text to the clipboard; **nothing is sent anywhere**.
 
-Deploy on [Render](https://render.com) (free): push this repo to GitHub, then **New > Blueprint**, pick the repo (it reads `render.yaml`), and set `OPENAI_API_KEY` to a free [Groq](https://console.groq.com) key when prompted. The key stays on the server. Public-URL protections: at most 20 messages per request, 2,000 characters per message, 60 messages per hour per IP (`MAX_MESSAGES_PER_HOUR`). The in-memory rate limit resets when the free instance restarts or sleeps, and the first request after sleep takes about a minute.
+Deploy on [Render](https://render.com) (free): push this repo to GitHub, then **New > Blueprint**, pick the repo (it reads `render.yaml`), and set `OPENAI_API_KEY` to a free [Groq](https://console.groq.com) key when prompted. The key stays on the server. Public-URL protections: at most 20 messages per request, 2,000 characters per message, 30 messages per hour per IP (`MAX_MESSAGES_PER_HOUR`) and 120 per day for the whole server (`MAX_MESSAGES_PER_DAY`), so a stranger cannot drain the model key's free quota. The in-memory rate limit resets when the free instance restarts or sleeps, and the first request after sleep takes about a minute.
 
 ## Test and evaluate
 ```bash

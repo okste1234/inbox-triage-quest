@@ -14,6 +14,7 @@ createApp({
   classifySystem,
   draftSystem,
   maxMessagesPerHour: Number(process.env.MAX_MESSAGES_PER_HOUR || 60),
+  maxMessagesPerDay: Number(process.env.MAX_MESSAGES_PER_DAY || 150),
 }).listen(port, () => {
   console.log(`Inbox triage on http://localhost:${port}  (${resolveProvider()}, ${resolveModel()}, ${classifyVersion})`);
 });

@@ -15,4 +15,6 @@ services:
       - key: OPENAI_API_KEY
         sync: false                   # paste in the Render dashboard, never in git
       - key: MAX_MESSAGES_PER_HOUR
-        value: "60"
+        value: "30"
+      - key: MAX_MESSAGES_PER_DAY
+        value: "120"   # whole server, per 24 h; keeps strangers from draining the free model quota

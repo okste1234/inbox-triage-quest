@@ -81,6 +81,15 @@ describe("server", () => {
     expect((await post(url, batch, { "x-forwarded-for": "2.2.2.2" })).status).toBe(200);
   });
 
+  it("has a server-wide daily budget so strangers cannot drain the model quota", async () => {
+    const url = await start({ maxMessagesPerHour: 100, maxMessagesPerDay: 4 });
+    const batch = { messages: Array.from({ length: 3 }, () => ({ body: "hi" })) };
+    expect((await post(url, batch, { "x-forwarded-for": "1.1.1.1" })).status).toBe(200);
+    const other = await post(url, batch, { "x-forwarded-for": "2.2.2.2" });
+    expect(other.status).toBe(429);
+    expect((await other.json()).error).toMatch(/daily/i);
+  });
+
   it("returns 404 for unknown routes and 405 for wrong methods", async () => {
     const url = await start();
     expect((await fetch(`${url}/nope`)).status).toBe(404);
