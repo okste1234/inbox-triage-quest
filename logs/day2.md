@@ -25,6 +25,24 @@ Evals before features: settle what `needs_human` means, write the scoring and cl
   - Intent misses: m005 (take-home receipt: application_problem vs status_check, label arguable), m038 (above), m050 (start date plus pay: model chose compensation_question, I labeled scheduling; both are in the lenient set).
   - Cost: free tier. 35,273 input and 10,477 output tokens. p50 latency 3.9 s, p95 8.3 s per message; 224 s for the run at concurrency 1.
 
+## classify.v2 vs the baseline (same 51 messages, same model, one run each)
+| | v1 | v2 |
+|---|---|---|
+| Intent strict | 94.1% (48/51) | 92.2% (47/51) |
+| needs_human precision | 40.7% | **55.0%** |
+| needs_human recall | 78.6% | 78.6% |
+| False alarms / missed escalations | 16 / 3 | **9** / 3 |
+| API errors | 0 | 1 |
+| Input tokens | 35,273 | 32,680 (-7%) |
+
+- **What improved:** false alarms fell from 16 to 9, as intended. v2 also fixed m005, m038 and m049 (the complaint and frustration cases).
+- **What did not:** missed escalations are still 3, just different ones. v2 misses m019 (running late), m028 (confirm the offer in writing) and m051 ("Hello"); v1 missed m038, m049 and m051. The costly direction did not improve. The prompt also only got 15% shorter, so token savings are small.
+- **The intent drop is partly an error, not a judgment:** m017 failed because Groq rejected the model's malformed JSON (`json_validate_failed`), which fell back to `other` + needs_human (the safe direction). Without it v2 would tie v1 at 48/51. m019 is a real new miss.
+- **Noise is large.** 17 of 51 messages flipped their `needs_human` answer between the two runs. With a reasoning model and one run each, a 1-message difference in intent accuracy means nothing, and even the precision gain is not proven. To fix it: repeat each prompt 3 times and report the spread (not done).
+- **The gain is optimistic.** I wrote v2's "not a reason" list after reading v1's mistakes on these same 51 messages, so v2 has effectively seen its test set. The Day 3 adversarial set and any held-out messages are the real test.
+- **Decision:** use v2 as the app default (fewer false alarms means less reviewer fatigue), with these caveats recorded.
+- **Not fixed:** one retry on `json_validate_failed` would likely have saved m017 and is cheap to add.
+
 ## What I didn't fix
 - Draft quality has not been evaluated at all (no rubric run). Only classification has a baseline.
 - `needs_human` precision is poor (16 false alarms on 51). Not tuned.
