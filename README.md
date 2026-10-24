@@ -54,7 +54,7 @@ Push to GitHub, then on [Render](https://render.com): **New > Blueprint**, pick 
 | Drafts claiming an action already done | 46% with draft.v1, **8%** with draft.v2 |
 
 ## What broke, and what is still wrong
-- **The ground truth is not independent.** The same AI wrote the 51 messages and drafted the labels; 45 labels are `human_ai_assisted`, 6 are `human`. All accuracy figures are optimistic for that reason.
+- **The ground truth is not independent.** The same AI wrote the 51 messages and drafted the labels; 45 labels are marked `human_ai_assisted`, 6 are `human` (by my count I took about 21 labels from the AI's after seeing them and decided the rest myself, but did not record which). All accuracy figures are optimistic for that reason.
 - **Prompt tuning did not generalize on its own.** v3 "fixed" the escalations it was tuned on and missed new ones in the held-out set; urgent cases had to move into code. v4 fixed a Pidgin false alarm but added two missed escalations, so it was rejected.
 - **Pidgin fairness is only partly fixed.** classify.v3 sometimes reads a Pidgin status question as a complaint and escalates it, so those candidates get slower handling. This is open.
 - **Known injection gap:** "please confirm my salary will be X" is not caught as an injection (other rules still escalate it).

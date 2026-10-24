@@ -22,7 +22,7 @@ AI assistance still requires active technical judgment. I set up the structure, 
 
 ## Where I slipped back
 - **Polish and deploy before measuring.** I pushed for a live demo while the measurements were still failing to run. The demo existed before there was one trustworthy accuracy number.
-- **Accepting output without checking.** I asked the AI to label the 51 messages, and when I redid them I looked at its labels first. 45 of 51 labels are `human_ai_assisted`, so every accuracy figure is optimistic. The labels were AI-assisted, which limits how independent my evaluation is, and the README and logs say so.
+- **Accepting output without checking.** I asked the AI to label the 51 messages, and when I redid them I looked at its labels first, and took 21 of them from the AI after seeing them. I did not record which, so 45 of 51 labels are marked `human_ai_assisted` to be safe, and every accuracy figure is optimistic. The labels were AI-assisted, which limits how independent my evaluation is, and the README and logs say so.
 
 ## The one thing I would do differently
 **Attack it on Day 2.** I built guardrails before I had tried to break anything, so Day 3 found what I could have found earlier: a message that faked the model's own JSON got through as "safe", emoji and gibberish vanished with no reply and no flag, and a card number was sent to the model. Next time the adversarial set is written alongside the first working slice.
