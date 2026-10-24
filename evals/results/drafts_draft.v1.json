@@ -385,7 +385,7 @@
         "inputTokens": 0,
         "outputTokens": 0
       },
-      "error": "api error: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m5pc6vdbehg9885dpthf7yda` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7647, Requ"
+      "error": "api error: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_REDACTED` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7647, Requ"
     },
     {
       "id": "m044",
