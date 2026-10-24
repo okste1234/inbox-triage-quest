@@ -44,6 +44,9 @@ export function resolveModel(env: Env = process.env): string {
 
 const MAX_BAD_JSON_RETRIES = 2;
 
+/** Every HTTP request this process has sent to an OpenAI-compatible provider, retries included. Free tiers cap requests per day. */
+export const requestStats = { requests: 0 };
+
 export interface OpenAICompatibleConfig {
   baseUrl: string;
   model: string;
@@ -55,6 +58,8 @@ export interface OpenAICompatibleConfig {
   maxTimeoutRetries?: number;
   /** Retries for connection failures (DNS, reset, offline), with exponential backoff. */
   maxNetworkRetries?: number;
+  /** Total HTTP requests per call across all retry kinds. */
+  maxAttempts?: number;
   /** Injected in tests so they do not really wait. */
   sleep?: (ms: number) => Promise<void>;
 }
@@ -77,6 +82,7 @@ export function makeOpenAICompatibleCall({
   timeoutMs = 60_000,
   maxTimeoutRetries = 2,
   maxNetworkRetries = 4,
+  maxAttempts = 5,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
 }: OpenAICompatibleConfig): LlmCall {
   const url = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
@@ -99,29 +105,38 @@ export function makeOpenAICompatibleCall({
     let badJsonRetries = 0;
     let timeoutRetries = 0;
     let networkRetries = 0;
+    let attempts = 0;
+    let lastError = new Error("no attempt made");
     for (;;) {
+      // Hard cap across every kind of retry: one stalled provider must not multiply into dozens of requests.
+      if (attempts >= maxAttempts) throw lastError;
+      attempts++;
+      requestStats.requests++;
       try {
         res = await fetch(url, { method: "POST", headers, body, signal: AbortSignal.timeout(timeoutMs) });
       } catch (err) {
         const timedOut = err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
         if (!timedOut) {
+          lastError = err instanceof TypeError ? new Error(`network failure: ${err.message}`) : (err as Error);
           if (err instanceof TypeError && networkRetries < maxNetworkRetries) {
             await sleep(Math.min(1000 * 2 ** networkRetries++, 15_000));
             continue;
           }
-          throw err instanceof TypeError ? new Error(`network failure: ${err.message}`) : err;
+          throw lastError;
         }
+        lastError = new Error(`request timed out after ${timeoutMs}ms`);
         if (timeoutRetries++ < maxTimeoutRetries) continue;
-        throw new Error(`request timed out after ${timeoutMs}ms`);
+        throw lastError;
       }
       if (res.ok) break;
       const text = await res.text();
+      lastError = new Error(`${res.status} ${text.slice(0, 200)}`);
       // Providers that validate JSON mode reject an occasional malformed sample; resampling usually works.
       if (res.status === 400 && text.includes("json_validate_failed") && badJsonRetries < MAX_BAD_JSON_RETRIES) {
         badJsonRetries++;
         continue;
       }
-      if (res.status !== 429 || rateLimitRetries >= maxRetries) throw new Error(`${res.status} ${text.slice(0, 200)}`);
+      if (res.status !== 429 || rateLimitRetries >= maxRetries) throw lastError;
       await sleep(retryDelayMs(res, text, rateLimitRetries++));
     }
 
@@ -143,10 +158,39 @@ export function makeOpenAICompatibleCall({
 /** Picks the provider from the environment. Throws on missing configuration. */
 export function makeLlmCall(env: Env = process.env): LlmCall {
   const model = resolveModel(env);
-  if (resolveProvider(env) === "anthropic") return makeAnthropicCall(model);
-  return makeOpenAICompatibleCall({
+  if (resolveProvider(env) === "anthropic") return withCircuitBreaker(makeAnthropicCall(model));
+  return withCircuitBreaker(makeOpenAICompatibleCall({
     baseUrl: env.OPENAI_BASE_URL || "http://localhost:11434/v1",
     model,
     apiKey: env.OPENAI_API_KEY,
-  });
+  }));
+}
+
+export interface BreakerOptions {
+  maxConsecutiveFailures?: number;
+  cooldownMs?: number;
+  now?: () => number;
+}
+
+/**
+ * After N consecutive failed calls, fail fast without touching the provider until the cooldown passes,
+ * then let one trial call through. Stops a down or throttled provider from being hammered by every message.
+ */
+export function withCircuitBreaker(inner: LlmCall, { maxConsecutiveFailures = 4, cooldownMs = 30_000, now = Date.now }: BreakerOptions = {}): LlmCall {
+  let failures = 0;
+  let openedAt = 0;
+  return async (req) => {
+    if (failures >= maxConsecutiveFailures && now() - openedAt < cooldownMs) {
+      throw new Error("circuit open: the model provider is failing, not sending more requests for now");
+    }
+    try {
+      const res = await inner(req);
+      failures = 0;
+      return res;
+    } catch (err) {
+      failures++;
+      if (failures >= maxConsecutiveFailures) openedAt = now();
+      throw err;
+    }
+  };
 }

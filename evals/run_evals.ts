@@ -6,8 +6,9 @@ import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
 import { z } from "zod";
 import { classifyMessage, type Usage } from "../src/classify.js";
-import { makeLlmCall, resolveModel, resolveProvider } from "../src/llm.js";
+import { makeLlmCall, requestStats, resolveModel, resolveProvider } from "../src/llm.js";
 import { LabelSchema, MessageSchema, type Classification } from "../src/schema.js";
+import { withProgress } from "./progress.js";
 import { runHealth, score } from "./score.js";
 
 // $ per million tokens (input, output). Update when the model changes.
@@ -39,7 +40,7 @@ async function main(): Promise<void> {
   const messages = limit > 0 ? allMessages.slice(0, limit) : allMessages;
   const ids = new Set(messages.map((m) => m.id));
   const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync(arg("labels", "data/labels.json"), "utf8"))).filter((l) => ids.has(l.id));
-  const llm = makeLlmCall();
+  const llm = withProgress(makeLlmCall());
 
   const results: Classification[] = new Array(messages.length);
   const latencies: number[] = new Array(messages.length);
@@ -106,6 +107,7 @@ async function main(): Promise<void> {
   console.log(`needs_human      precision ${pct(scored.needsHuman.precision)}  recall ${pct(scored.needsHuman.recall)}  (tp ${scored.needsHuman.tp} fp ${scored.needsHuman.fp} fn ${scored.needsHuman.fn} tn ${scored.needsHuman.tn})`);
   console.log(`Errors ${errors.length}  Tokens in/out ${usage.inputTokens}/${usage.outputTokens}  Cost ${costUsd === null ? "n/a" : "$" + costUsd.toFixed(4)}  p50 ${report.latency_ms.p50}ms p95 ${report.latency_ms.p95}ms`);
   console.log(`Intent misses: ${scored.misses.map((m) => `${m.id}(${m.expected}->${m.got})`).join(", ") || "none"}`);
+  console.log(`HTTP requests sent: ${requestStats.requests} (retries included; the free tier allows a fixed number per day)`);
   console.log(`Wrote ${out}`);
 }
 

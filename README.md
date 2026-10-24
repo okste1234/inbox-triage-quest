@@ -6,13 +6,16 @@ Groups candidate messages by intent and drafts a short reply for each. **It neve
 
 ## Run
 ```bash
-cp .env.example .env   # add ANTHROPIC_API_KEY
+cp .env.example .env   # add a key; see 'Using a free open model' below (tested path: Groq, openai/gpt-oss-20b)
 npm install
 npm start -- data/sample_messages.json
 npm run review
 ```
 
-### Using a free open model instead of the Anthropic API
+### Model setup (all results so far used a free open model on Groq)
+The Anthropic API path is implemented but has never been run (no key available), so every number in this repo comes from `openai/gpt-oss-20b` on Groq's free tier. Free tier limits matter: 8,000 tokens per minute and 1,000 requests per day.
+
+#### Using a free open model instead of the Anthropic API
 Any OpenAI-compatible endpoint works. Easiest is local [Ollama](https://ollama.com) (no account, no key):
 ```bash
 ollama pull llama3.1:8b

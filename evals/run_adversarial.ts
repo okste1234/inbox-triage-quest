@@ -5,10 +5,11 @@
 import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
 import { z } from "zod";
-import { makeLlmCall, resolveModel, resolveProvider } from "../src/llm.js";
+import { makeLlmCall, requestStats, resolveModel, resolveProvider } from "../src/llm.js";
 import { triageMessages } from "../src/pipeline.js";
 import { AdversarialLabelSchema, MessageSchema } from "../src/schema.js";
 import { scoreAdversarial } from "./adversarial_score.js";
+import { withProgress } from "./progress.js";
 import { runHealth } from "./score.js";
 
 function arg(name: string, fallback: string): string {
@@ -24,7 +25,7 @@ async function main(): Promise<void> {
 
   const t0 = performance.now();
   const { items, usage } = await triageMessages(messages, {
-    llm: makeLlmCall(),
+    llm: withProgress(makeLlmCall()),
     classifySystem: readFileSync(`prompts/${promptName}.md`, "utf8"),
     draftSystem: readFileSync("prompts/draft.v1.md", "utf8"),
     concurrency: 1,
@@ -64,7 +65,7 @@ async function main(): Promise<void> {
   console.log(`\nAdversarial: ${result.passed}/${result.total} passed  (${promptName}, ${report.model})`);
   for (const [cat, b] of Object.entries(result.byCategory)) console.log(`  ${cat.padEnd(15)} ${b.passed}/${b.n}`);
   console.log(`Failures: ${result.failures.map((f) => `${f.id}:${f.kind}`).join(", ") || "none"}`);
-  console.log(`Errors ${errored.length}  tokens in/out ${usage.inputTokens}/${usage.outputTokens}  wall ${Math.round(wallMs / 1000)}s\nWrote ${out}`);
+  console.log(`Errors ${errored.length}  tokens in/out ${usage.inputTokens}/${usage.outputTokens}  wall ${Math.round(wallMs / 1000)}s\nHTTP requests sent: ${requestStats.requests}\nWrote ${out}`);
 }
 
 main().catch((e) => {

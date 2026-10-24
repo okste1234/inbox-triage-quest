@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { makeOpenAICompatibleCall, resolveProvider } from "../src/llm.js";
+import { makeOpenAICompatibleCall, requestStats, resolveProvider, withCircuitBreaker } from "../src/llm.js";
 import type { LlmOutputSpec } from "../src/llm-types.js";
 
 const output: LlmOutputSpec = { schema: { type: "object" }, hint: 'HINT with "injection_suspected"' };
@@ -176,6 +176,73 @@ describe("makeOpenAICompatibleCall: network blips", () => {
     const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", maxNetworkRetries: 2, sleep: async () => {} });
     await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/network/i);
     expect(fn).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe("makeOpenAICompatibleCall: total attempt cap", () => {
+  it("never sends more than maxAttempts requests for one call, whatever mix of failures happens", async () => {
+    const fn = vi
+      .fn()
+      .mockResolvedValueOnce(new Response("{}", { status: 429, headers: { "retry-after": "0" } }))
+      .mockResolvedValueOnce(new Response('{"error":{"code":"json_validate_failed"}}', { status: 400 }))
+      .mockRejectedValueOnce(Object.assign(new TypeError("fetch failed"), {}))
+      .mockResolvedValue(new Response("{}", { status: 429, headers: { "retry-after": "0" } }));
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", maxAttempts: 3, sleep: async () => {} });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow();
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+
+  it("counts every HTTP request it sends, retries included", async () => {
+    const fn = vi
+      .fn()
+      .mockResolvedValueOnce(new Response("{}", { status: 429, headers: { "retry-after": "0" } }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const before = requestStats.requests;
+    await makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async () => {} })({ system: "s", user: "u", output });
+    expect(requestStats.requests - before).toBe(2);
+  });
+});
+
+describe("withCircuitBreaker", () => {
+  const req = { system: "s", user: "u", output };
+  const ok = { text: "{}", stopReason: "end_turn", inputTokens: 1, outputTokens: 1 };
+
+  it("opens after N consecutive failures and stops calling the provider", async () => {
+    const inner = vi.fn(async () => {
+      throw new Error("down");
+    });
+    const call = withCircuitBreaker(inner, { maxConsecutiveFailures: 3, cooldownMs: 1000, now: () => 0 });
+    for (let i = 0; i < 3; i++) await expect(call(req)).rejects.toThrow("down");
+    await expect(call(req)).rejects.toThrow(/circuit open/i);
+    await expect(call(req)).rejects.toThrow(/circuit open/i);
+    expect(inner).toHaveBeenCalledTimes(3);
+  });
+
+  it("a success resets the failure count", async () => {
+    const inner = vi.fn().mockRejectedValueOnce(new Error("x")).mockRejectedValueOnce(new Error("x")).mockResolvedValueOnce(ok).mockRejectedValue(new Error("x"));
+    const call = withCircuitBreaker(inner, { maxConsecutiveFailures: 3, cooldownMs: 1000, now: () => 0 });
+    await expect(call(req)).rejects.toThrow("x");
+    await expect(call(req)).rejects.toThrow("x");
+    await call(req);
+    await expect(call(req)).rejects.toThrow("x");
+    await expect(call(req)).rejects.toThrow("x");
+    await expect(call(req)).rejects.toThrow("x"); // 3rd consecutive since the success, still a real call
+    await expect(call(req)).rejects.toThrow(/circuit open/i);
+  });
+
+  it("lets one trial call through after the cooldown and closes again on success", async () => {
+    let t = 0;
+    const inner = vi.fn().mockRejectedValueOnce(new Error("x")).mockRejectedValueOnce(new Error("x")).mockResolvedValue(ok);
+    const call = withCircuitBreaker(inner, { maxConsecutiveFailures: 2, cooldownMs: 1000, now: () => t });
+    await expect(call(req)).rejects.toThrow("x");
+    await expect(call(req)).rejects.toThrow("x");
+    await expect(call(req)).rejects.toThrow(/circuit open/i);
+    t = 1500;
+    expect((await call(req)).text).toBe("{}");
+    expect((await call(req)).text).toBe("{}");
+    expect(inner).toHaveBeenCalledTimes(4);
   });
 });
 
