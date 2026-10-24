@@ -2,6 +2,7 @@ import type { AddressInfo } from "node:net";
 import type { Server } from "node:http";
 import { afterEach, describe, expect, it } from "vitest";
 import { CLASSIFY_OUTPUT } from "../src/classify.js";
+import { detectInjection } from "../src/guardrails.js";
 import { createApp } from "../src/server.js";
 import type { LlmCall } from "../src/llm-types.js";
 
@@ -35,11 +36,14 @@ describe("server", () => {
     expect((await fetch(`${url}/healthz`)).status).toBe(200);
   });
 
-  it("serves sample messages without email addresses", async () => {
+  it("serves a small curated demo set without email addresses", async () => {
     const url = await start();
     const body = await (await fetch(`${url}/api/sample`)).text();
-    expect(JSON.parse(body).length).toBeGreaterThan(10);
+    const sample = JSON.parse(body) as { body: string }[];
+    expect(sample.length).toBeGreaterThanOrEqual(5);
+    expect(sample.length).toBeLessThanOrEqual(8);
     expect(body).not.toContain("@example.com");
+    expect(sample.some((m) => detectInjection(m.body))).toBe(true);
   });
 
   it("triages posted messages", async () => {

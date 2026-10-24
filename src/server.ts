@@ -27,7 +27,7 @@ const RequestSchema = z.object({ messages: z.array(InputMessage).min(1).max(MAX_
 const page = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 
 function sampleMessages(): Omit<Message, "from_email">[] {
-  const all = z.array(MessageSchema).parse(JSON.parse(readFileSync(new URL("../data/sample_messages.json", import.meta.url), "utf8")));
+  const all = z.array(MessageSchema).parse(JSON.parse(readFileSync(new URL("../data/demo_messages.json", import.meta.url), "utf8")));
   return all.map(({ from_email: _drop, ...rest }) => rest);
 }
 

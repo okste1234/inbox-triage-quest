@@ -57,8 +57,8 @@
 
   <section class="panel" aria-label="Add messages">
     <div class="row" style="margin-top:0">
-      <button id="sample" class="primary">Try 12 sample messages</button>
-      <span class="note" style="align-self:center">or paste one below (demo limit: 60 messages per hour)</span>
+      <button id="sample" class="primary">Try 6 sample messages</button>
+      <span class="note" style="align-self:center">or paste one below. Runs on a free-tier open model, so expect a few seconds per message (demo limit: 60 messages per hour).</span>
     </div>
     <div style="margin-top:12px">
       <label for="subject">Subject (optional)</label>
@@ -93,7 +93,6 @@ const REASON_LABEL = {
   low_confidence: "low confidence", blank: "empty", contentless: "greeting only", time_critical: "needs action within hours", no_draft: "no reply drafted", sensitive_data: "contains sensitive numbers", model_judgment: "judged sensitive", draft_blocked: "draft blocked by guardrail", error: "could not be classified",
 };
 const FLAG_LABEL = { too_long: "long", date_time: "mentions a date or time", contact_details: "contact details", money: "money", hiring_promise: "hiring promise" };
-const SAMPLE_IDS = ["m001", "m009", "m015", "m016", "m019", "m022", "m024", "m029", "m036", "m041", "m048", "m051"];
 
 const $ = (id) => document.getElementById(id);
 const state = []; // { item, decision: "pending"|"approved"|"rejected", text }
@@ -194,7 +193,7 @@ function updateBar() {
 
 $("sample").addEventListener("click", async () => {
   const all = await (await fetch("/api/sample")).json();
-  triage(SAMPLE_IDS.map((id) => all.find((m) => m.id === id)).filter(Boolean).map(({ from_name, subject, body }) => ({ from_name, subject, body })));
+  triage(all.map(({ from_name, subject, body }) => ({ from_name, subject, body })));
 });
 $("add").addEventListener("click", () => {
   const body = $("body").value.trim();
