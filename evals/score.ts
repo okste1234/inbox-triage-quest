@@ -61,3 +61,11 @@ export function score(preds: Prediction[], labels: Label[]) {
     needsHumanMisses,
   };
 }
+
+export const MAX_ERROR_RATE = 0.2;
+
+/** A run where many calls failed measures the fallback path, not the model, so its scores must not be reported. */
+export function runHealth(n: number, errorCount: number): { valid: boolean; errorRate: number } {
+  const errorRate = n === 0 ? 1 : errorCount / n;
+  return { valid: n > 0 && errorRate <= MAX_ERROR_RATE, errorRate };
+}

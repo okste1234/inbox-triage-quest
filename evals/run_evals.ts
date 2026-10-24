@@ -1,5 +1,6 @@
 // Runs the classifier over data/sample_messages.json and scores it against data/labels.json.
-//   npm run eval -- [--prompt classify.v1] [--out evals/results/day2_baseline.json] [--concurrency 5]
+//   npm run eval -- [--prompt classify.v1] [--out evals/results/day2_baseline.json] [--concurrency 5] [--limit N]
+// --limit scores only the first N messages: a cheap smoke test, not a baseline.
 // Uses a live model (Anthropic API, or any OpenAI-compatible endpoint such as local Ollama; see .env.example). Cost and latency are measured, not estimated.
 import "dotenv/config";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -7,7 +8,7 @@ import { z } from "zod";
 import { classifyMessage, type Usage } from "../src/classify.js";
 import { makeLlmCall, resolveModel, resolveProvider } from "../src/llm.js";
 import { LabelSchema, MessageSchema, type Classification } from "../src/schema.js";
-import { score } from "./score.js";
+import { runHealth, score } from "./score.js";
 
 // $ per million tokens (input, output). Update when the model changes.
 const PRICES: Record<string, [number, number]> = { "claude-opus-5-5": [4, 20] };
@@ -27,14 +28,17 @@ async function main(): Promise<void> {
     console.error("ANTHROPIC_API_KEY is not set. Copy .env.example to .env and add a key, or set PROVIDER=openai-compatible (see README).");
     process.exit(1);
   }
+  const limit = Number(arg("limit", "0"));
   const prompt = arg("prompt", "classify.v1");
-  const out = arg("out", "evals/results/day2_baseline.json");
+  const out = arg("out", limit > 0 ? "evals/results/smoke.json" : "evals/results/day2_baseline.json");
   const concurrency = Number(arg("concurrency", "5"));
   const model = resolveModel();
 
   const system = readFileSync(`prompts/${prompt}.md`, "utf8");
-  const messages = z.array(MessageSchema).parse(JSON.parse(readFileSync("data/sample_messages.json", "utf8")));
-  const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync("data/labels.json", "utf8")));
+  const allMessages = z.array(MessageSchema).parse(JSON.parse(readFileSync("data/sample_messages.json", "utf8")));
+  const messages = limit > 0 ? allMessages.slice(0, limit) : allMessages;
+  const ids = new Set(messages.map((m) => m.id));
+  const labels = z.array(LabelSchema).parse(JSON.parse(readFileSync("data/labels.json", "utf8"))).filter((l) => ids.has(l.id));
   const llm = makeLlmCall();
 
   const results: Classification[] = new Array(messages.length);
@@ -61,6 +65,16 @@ async function main(): Promise<void> {
   const price = PRICES[model];
   const costUsd = price ? (usage.inputTokens * price[0] + usage.outputTokens * price[1]) / 1e6 : null;
   const errors = results.filter((r) => r.error).map((r) => ({ id: r.id, error: r.error }));
+
+  const health = runHealth(messages.length, errors.length);
+  if (!health.valid) {
+    const counts = new Map<string, number>();
+    for (const e of errors) counts.set(e.error ?? "", (counts.get(e.error ?? "") ?? 0) + 1);
+    const [top, count] = [...counts].sort((a, b) => b[1] - a[1])[0] ?? ["", 0];
+    console.error(`\nINVALID RUN: ${errors.length}/${messages.length} calls failed (${(health.errorRate * 100).toFixed(0)}%). These scores would measure the fallback, not the model, so nothing was written.`);
+    console.error(`Most common error (${count}x): ${top.trim().slice(0, 300)}`);
+    process.exit(1);
+  }
 
   const report = {
     prompt,

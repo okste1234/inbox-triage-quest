@@ -60,9 +60,57 @@ describe("makeOpenAICompatibleCall", () => {
   });
 
   it("throws on a non-2xx response so classifyMessage can turn it into needs_human", async () => {
-    stubFetch({ error: { message: "rate limited" } }, 429);
+    stubFetch({ error: { message: "server error" } }, 500);
     const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m" });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/500/);
+  });
+});
+
+describe("makeOpenAICompatibleCall: rate limits", () => {
+  const rateLimited = (headers: Record<string, string> = {}) => new Response('{"error":{"message":"Please try again in 2s"}}', { status: 429, headers });
+
+  it("waits and retries on 429, honoring retry-after", async () => {
+    const fn = vi
+      .fn()
+      .mockResolvedValueOnce(rateLimited({ "retry-after": "3" }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const sleeps: number[] = [];
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async (ms) => void sleeps.push(ms) });
+    expect((await call({ system: "s", user: "u", output })).text).toBe("{}");
+    expect(fn).toHaveBeenCalledTimes(2);
+    expect(sleeps).toEqual([3000]);
+  });
+
+  it("falls back to the 'try again in Ns' text, then to exponential backoff", async () => {
+    const fn = vi
+      .fn()
+      .mockResolvedValueOnce(rateLimited())
+      .mockResolvedValueOnce(new Response("{}", { status: 429 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify(okBody("{}")), { status: 200 }));
+    vi.stubGlobal("fetch", fn);
+    const sleeps: number[] = [];
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async (ms) => void sleeps.push(ms) });
+    await call({ system: "s", user: "u", output });
+    expect(sleeps[0]).toBeGreaterThanOrEqual(2000);
+    expect(sleeps[0]).toBeLessThan(3500);
+    expect(sleeps[1]).toBeGreaterThanOrEqual(2000);
+  });
+
+  it("gives up after maxRetries and reports the 429", async () => {
+    const fn = vi.fn(async (..._a: unknown[]) => rateLimited({ "retry-after": "0" }));
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", maxRetries: 2, sleep: async () => {} });
     await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/429/);
+    expect(fn).toHaveBeenCalledTimes(3);
+  });
+
+  it("does not retry other errors", async () => {
+    const fn = vi.fn(async (..._a: unknown[]) => new Response("bad", { status: 400 }));
+    vi.stubGlobal("fetch", fn);
+    const call = makeOpenAICompatibleCall({ baseUrl: "http://x/v1", model: "m", sleep: async () => {} });
+    await expect(call({ system: "s", user: "u", output })).rejects.toThrow(/400/);
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 });
 

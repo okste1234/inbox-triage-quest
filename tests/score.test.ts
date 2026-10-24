@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { score, type Prediction } from "../evals/score.js";
+import { runHealth, score, type Prediction } from "../evals/score.js";
 import type { Label } from "../src/schema.js";
 
 const label = (id: string, intent: Label["intent"], extra: Partial<Label> = {}): Label => ({
@@ -77,5 +77,20 @@ describe("score: needs_human", () => {
   it("lists the disagreements so they can be read", () => {
     const r = score([pred("a", "other", false)], [label("a", "other", { needs_human: true })]);
     expect(r.needsHumanMisses).toEqual([{ id: "a", expected: true, got: false }]);
+  });
+});
+
+describe("runHealth", () => {
+  it("is valid when few calls failed", () => {
+    expect(runHealth(50, 2).valid).toBe(true);
+  });
+  it("is invalid when more than 20% of calls failed", () => {
+    const h = runHealth(50, 11);
+    expect(h.valid).toBe(false);
+    expect(h.errorRate).toBeCloseTo(0.22);
+  });
+  it("is invalid when every call failed, and for an empty run", () => {
+    expect(runHealth(51, 51).valid).toBe(false);
+    expect(runHealth(0, 0).valid).toBe(false);
   });
 });

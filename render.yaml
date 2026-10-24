@@ -11,7 +11,7 @@ services:
       - key: OPENAI_BASE_URL
         value: https://api.groq.com/openai/v1
       - key: MODEL
-        value: llama-3.1-8b-instant   # confirm this name in the Groq console; free-tier model lists change
+        value: openai/gpt-oss-20b   # baseline model; Groq's free-tier model list changes, confirm in the console
       - key: OPENAI_API_KEY
         sync: false                   # paste in the Render dashboard, never in git
       - key: MAX_MESSAGES_PER_HOUR

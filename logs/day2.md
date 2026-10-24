@@ -16,11 +16,19 @@ Evals before features: settle what `needs_human` means, write the scoring and cl
 (fill in with the prompts you actually gave. What the AI got wrong today: its Day 1 label for m045 contradicted its own note; `ModelOutput` first allowed confidence outside 0-1 in the JSON schema, so zod does that check after parsing.)
 
 ## What broke (with numbers)
-- **Nothing measured yet.** There is no `ANTHROPIC_API_KEY` in this environment, so `npm run eval` exits with an error and **no classify.v1 accuracy exists**. `evals/results/day2_baseline.json` has not been created and I have not invented numbers for it.
-- The live API call in `src/llm.ts` (the `output_config.format` request shape) has only been typechecked, never executed. It is the first thing that could fail when the key is added.
+- **First eval attempt was invalid.** I used `llama-3.1-8b-instant` on Groq; every one of the 51 calls returned `404 model_not_found`. The script still printed "13.7% accuracy" because failures fall back to `other` + `needs_human`. That number measured the fallback path, not the model. I deleted the result and made the runner refuse to report any run where more than 20% of calls fail (`runHealth`, tests first).
+- **Second attempt hit Groq's free-tier limit** (8,000 tokens per minute): 44 of 51 calls failed with 429. Added wait-and-retry on 429 (tests first) and ran with concurrency 1.
+- **Baseline (valid), `classify.v1` on `openai/gpt-oss-20b` via Groq, 51 messages, 0 errors:**
+  - Intent accuracy: **94.1% strict (48/51), 96.1% lenient**. By label provenance: 97.8% of the 45 `human_ai_assisted` labels, **66.7% (4/6) of the `human` labels**. The 6 `human` labels are the ones I disagreed with the AI on, i.e. the hardest cases, so that split is not a fair comparison, and the 45 are partly AI-written.
+  - `needs_human`: **precision 40.7%, recall 78.6%** (tp 11, fp 16, fn 3, tn 21). Missing an escalation is the costly direction, and it missed 3: m038 (a complaint classified as status_check, so the code rule for complaints never fired), m049 (status check plus frustration, complaint not listed as a secondary intent), m051 (just "Hello").
+  - All 16 false positives came from the model's own `needs_human` judgment, not from the code rules.
+  - Intent misses: m005 (take-home receipt: application_problem vs status_check, label arguable), m038 (above), m050 (start date plus pay: model chose compensation_question, I labeled scheduling; both are in the lenient set).
+  - Cost: free tier. 35,273 input and 10,477 output tokens. p50 latency 3.9 s, p95 8.3 s per message; 224 s for the run at concurrency 1.
 
 ## What I didn't fix
-- No baseline score. No draft stage yet (reply generation, rubric checks). Not wired into an end-to-end CLI.
+- Draft quality has not been evaluated at all (no rubric run). Only classification has a baseline.
+- `needs_human` precision is poor (16 false alarms on 51). Not tuned.
+- The live Anthropic API path has still never been run; all numbers are from an open model.
 - Server-side refusal fallbacks are not enabled; a refusal just routes the message to a person. Fine for this task, but untested.
 - Labels are `human_ai_assisted` for 45 of 51, so any accuracy number overstates how independent the answer key is.
 
@@ -39,4 +47,4 @@ The brief wants something I can show live, so I built the rest of the pipeline i
 **What is NOT verified:** (1) The UI was exercised against a keyword stub standing in for the model, so everything I saw (including a salary draft being blocked by the guardrail) shows the plumbing works, not that any real model behaves well. (2) No real model has been called yet, so there is still no accuracy, latency or cost number. (3) `docker build` was not run (the Docker daemon was not running here), and nothing is deployed. (4) The in-memory rate limit resets on restart, and trusts the `x-forwarded-for` header, which is correct behind Render's proxy but spoofable if the server is exposed directly.
 
 ## Tomorrow
-Add the key, run `npm run eval`, record the baseline in `evals/results/day2_baseline.json` and `prompts/CHANGELOG.md`. Then Day 3: build adversarial data (injection, multi-intent, Pidgin, blank) and a 1,000-message load test.
+Try a shorter `classify.v2` prompt (fewer tokens per call) and compare against this baseline. Then Day 3: build adversarial data (injection, multi-intent, Pidgin, blank) and a 1,000-message load test.

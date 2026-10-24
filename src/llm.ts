@@ -39,37 +39,59 @@ export function resolveProvider(env: Env = process.env): Provider {
 export function resolveModel(env: Env = process.env): string {
   if (env.MODEL) return env.MODEL;
   if (resolveProvider(env) === "anthropic") return DEFAULT_MODEL;
-  throw new Error("MODEL is required when PROVIDER=openai-compatible (for example llama-3.1-8b-instant)");
+  throw new Error("MODEL is required when PROVIDER=openai-compatible (for example openai/gpt-oss-20b on Groq)");
 }
 
 export interface OpenAICompatibleConfig {
   baseUrl: string;
   model: string;
   apiKey?: string;
+  /** Retries after a 429 (rate limit). Free tiers cap tokens per minute, so waiting is normal. */
+  maxRetries?: number;
+  /** Injected in tests so they do not really wait. */
+  sleep?: (ms: number) => Promise<void>;
+}
+
+/** How long to wait after a 429: the retry-after header, else "try again in 2.5s" in the body, else exponential. */
+function retryDelayMs(res: Response, body: string, attempt: number): number {
+  const header = Number(res.headers.get("retry-after"));
+  if (res.headers.get("retry-after") !== null && Number.isFinite(header)) return header * 1000;
+  const m = body.match(/try again in ([\d.]+)s/i);
+  if (m) return Math.ceil(Number(m[1]) * 1000) + 500;
+  return Math.min(2000 * 2 ** attempt, 30_000);
 }
 
 /** Works with Ollama, Groq, OpenRouter, Together and anything else that speaks /chat/completions. */
-export function makeOpenAICompatibleCall({ baseUrl, model, apiKey }: OpenAICompatibleConfig): LlmCall {
+export function makeOpenAICompatibleCall({
+  baseUrl,
+  model,
+  apiKey,
+  maxRetries = 6,
+  sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
+}: OpenAICompatibleConfig): LlmCall {
   const url = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
   return async ({ system, user, output }) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        model,
-        temperature: 0,
-        max_tokens: 1000,
-        response_format: { type: "json_object" },
-        messages: [
-          { role: "system", content: `${system}\n\n${output.hint}` },
-          { role: "user", content: user },
-        ],
-      }),
+    const body = JSON.stringify({
+      model,
+      temperature: 0,
+      max_tokens: 1000,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: `${system}\n\n${output.hint}` },
+        { role: "user", content: user },
+      ],
     });
-    if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 200)}`);
+    let res: Response;
+    for (let attempt = 0; ; attempt++) {
+      res = await fetch(url, { method: "POST", headers, body });
+      if (res.ok) break;
+      const text = await res.text();
+      if (res.status !== 429 || attempt >= maxRetries) throw new Error(`${res.status} ${text.slice(0, 200)}`);
+      await sleep(retryDelayMs(res, text, attempt));
+    }
 
     const data = (await res.json()) as {
       choices?: { message?: { content?: string | null }; finish_reason?: string | null }[];
