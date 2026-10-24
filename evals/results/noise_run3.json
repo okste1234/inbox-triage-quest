@@ -1,0 +1,615 @@
+{
+  "prompt": "classify.v3",
+  "provider": "openai-compatible",
+  "model": "openai/gpt-oss-20b",
+  "ran_at": "2026-10-24T10:23:52.720Z",
+  "n": 51,
+  "intent": {
+    "correct": 47,
+    "total": 51,
+    "strict": 0.9215686274509803,
+    "lenient": 0.9411764705882353
+  },
+  "byProvenance": {
+    "human_ai_assisted": {
+      "n": 45,
+      "strict": 0.9555555555555556
+    },
+    "human": {
+      "n": 6,
+      "strict": 0.6666666666666666
+    }
+  },
+  "needsHuman": {
+    "tp": 14,
+    "fp": 5,
+    "fn": 0,
+    "tn": 32,
+    "precision": 0.7368421052631579,
+    "recall": 1
+  },
+  "misses": [
+    {
+      "id": "m031",
+      "expected": "application_problem",
+      "got": "status_check"
+    },
+    {
+      "id": "m038",
+      "expected": "complaint",
+      "got": "status_check"
+    },
+    {
+      "id": "m049",
+      "expected": "status_check",
+      "got": "other"
+    },
+    {
+      "id": "m050",
+      "expected": "scheduling",
+      "got": "compensation_question"
+    }
+  ],
+  "missing": [],
+  "needsHumanMisses": [
+    {
+      "id": "m003",
+      "expected": false,
+      "got": true
+    },
+    {
+      "id": "m005",
+      "expected": false,
+      "got": true
+    },
+    {
+      "id": "m013",
+      "expected": false,
+      "got": true
+    },
+    {
+      "id": "m015",
+      "expected": false,
+      "got": true
+    },
+    {
+      "id": "m031",
+      "expected": false,
+      "got": true
+    }
+  ],
+  "errors": [
+    {
+      "id": "m049",
+      "error": "api error: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m5pc6vdbehg9885dpthf7yda` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198978, Req"
+    }
+  ],
+  "usage": {
+    "inputTokens": 34448,
+    "outputTokens": 9220
+  },
+  "cost_usd": null,
+  "latency_ms": {
+    "p50": 2862,
+    "p95": 90158,
+    "wall": 818711
+  },
+  "predictions": [
+    {
+      "id": "m001",
+      "intent": "status_check",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m002",
+      "intent": "status_check",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m003",
+      "intent": "status_check",
+      "secondary_intents": [
+        "complaint"
+      ],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint",
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m004",
+      "intent": "status_check",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m005",
+      "intent": "status_check",
+      "secondary_intents": [
+        "application_problem"
+      ],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m006",
+      "intent": "status_check",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m007",
+      "intent": "status_check",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m008",
+      "intent": "status_check",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m009",
+      "intent": "scheduling",
+      "secondary_intents": [],
+      "confidence": 0.99,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m010",
+      "intent": "scheduling",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m011",
+      "intent": "scheduling",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m012",
+      "intent": "scheduling",
+      "secondary_intents": [],
+      "confidence": 0.99,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m013",
+      "intent": "scheduling",
+      "secondary_intents": [
+        "application_problem"
+      ],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m014",
+      "intent": "scheduling",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m015",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [
+        "scheduling"
+      ],
+      "confidence": 0.99,
+      "needs_human": true,
+      "escalation_reasons": [
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m016",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m017",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "time_critical"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m018",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m019",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "time_critical",
+        "model_judgment"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m020",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m021",
+      "intent": "reschedule_or_withdraw",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m022",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m023",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m024",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "model_judgment"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m025",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m026",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m027",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m028",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "model_judgment"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m029",
+      "intent": "application_problem",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m030",
+      "intent": "application_problem",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m031",
+      "intent": "status_check",
+      "secondary_intents": [
+        "application_problem"
+      ],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m032",
+      "intent": "application_problem",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m033",
+      "intent": "application_problem",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m034",
+      "intent": "application_problem",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m035",
+      "intent": "application_problem",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m036",
+      "intent": "complaint",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint",
+        "time_critical"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m037",
+      "intent": "complaint",
+      "secondary_intents": [],
+      "confidence": 0.9,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m038",
+      "intent": "status_check",
+      "secondary_intents": [
+        "complaint"
+      ],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint",
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m039",
+      "intent": "complaint",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m040",
+      "intent": "complaint",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m041",
+      "intent": "complaint",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "complaint"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m042",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m043",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m044",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m045",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m046",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0.99,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m047",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": false,
+      "escalation_reasons": [],
+      "injection_suspected": false
+    },
+    {
+      "id": "m048",
+      "intent": "scheduling",
+      "secondary_intents": [
+        "compensation_question",
+        "application_problem"
+      ],
+      "confidence": 0.9,
+      "needs_human": true,
+      "escalation_reasons": [
+        "multi_intent"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m049",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 0,
+      "needs_human": true,
+      "escalation_reasons": [
+        "error"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m050",
+      "intent": "compensation_question",
+      "secondary_intents": [],
+      "confidence": 0.95,
+      "needs_human": true,
+      "escalation_reasons": [
+        "model_judgment"
+      ],
+      "injection_suspected": false
+    },
+    {
+      "id": "m051",
+      "intent": "other",
+      "secondary_intents": [],
+      "confidence": 1,
+      "needs_human": true,
+      "escalation_reasons": [
+        "contentless"
+      ],
+      "injection_suspected": false
+    }
+  ]
+}

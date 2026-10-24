@@ -61,7 +61,7 @@ Push to GitHub, then on [Render](https://render.com): **New > Blueprint**, pick 
 - **Pattern-based injection detection is brittle.** A rephrased attack can slip past it. It is a layer, not a guarantee.
 - **Drafts can still claim actions that did not happen (8% of the time).** The reviewer sees a warning flag, and a human must catch it before sending.
 - **Draft quality is only rule-checked** (flags and length), not judged for helpfulness.
-- **Run-to-run noise is large:** the same prompt flipped `needs_human` on 6 of 51 messages between two runs, so a difference of a message or two is not evidence.
+- **Run-to-run noise is small but not zero.** Three repeats of the same prompt on the 51 messages: intent accuracy 94.1%, 94.1%, 92.2% (a one-message swing), `needs_human` precision and recall identical every time. Treat a one-message difference as noise; two or more as a signal. (I first claimed the noise was large; that came from comparing runs under different code, and I retracted it. Details in `logs/day4.md`.) Sample sizes are small: 51 messages, 16 held-out, 8 dialect.
 - **Infrastructure cost me time and quota:** a network outage, a missing HTTP timeout (a stalled call froze an eval), and retry logic that multiplied requests and used 831 of a day's 1,000 free requests. All fixed and tested; details in `logs/day4.md`.
 
 ## Repo map

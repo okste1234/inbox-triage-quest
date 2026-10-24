@@ -69,6 +69,21 @@ Seen on the live demo: "We have withdrawn your application" and "I've forwarded 
 
 Remaining claims in v2 (m002, m004, m032) all say "I've forwarded ... to the team". They are caught by the new flag and shown to the reviewer. Caveats: the detector's phrasing was written from the failures I saw, so it may miss other ways of saying the same thing; one run each; this measures flags, not whether a reply is good. Draft quality is still not judged beyond these rule checks. About 136 requests.
 
+## Measuring run-to-run noise (and retracting an earlier claim)
+Three repeats of classify.v3 on the 51 messages, same code, same model (`evals/results/noise_run*.json`, `npm run eval:noise`):
+
+| Metric | Run 1 | Run 2 | Run 3 | Range |
+|---|---|---|---|---|
+| Intent accuracy (strict) | 94.1% | 94.1% | 92.2% | 2.0 points (1 message) |
+| needs_human precision | 73.7% | 73.7% | 73.7% | 0 |
+| needs_human recall | 100% | 100% | 100% | 0 |
+
+- **No message changed its `needs_human` answer in any run.** Only 3 messages changed intent (m031, m043, m049, all borderline cases). Two messages were wrong every time (m038 and m050), which is systematic disagreement between my labels and the model, not noise.
+- **What this means:** for this setup, a difference of one message on intent accuracy (about 2 points) is noise; `needs_human` was stable. Differences of 2 or more messages deserve attention. The same applies to the v3 vs v4 comparison: the dialect result (5/8 vs 7/8, only 8 messages) and the held-out miss (h006, one message of 16) are still small samples.
+- **Retraction:** on Day 3 I wrote that the same v2 prompt "flipped `needs_human` on 6 of 51 messages between two runs" and used that to say noise was large. That comparison was not a clean repeat: the two runs were under different code (the greeting rule and the retry for malformed JSON were added in between, and one of the runs had an API error). With identical code the noise is much smaller. I had overstated it.
+- **Caveats:** only 3 repeats, one model, and part of the stability comes from rules that live in code (greetings, urgency, injection, complaints), not the model.
+- **Infrastructure noise is a different thing:** repeat 3's p95 latency was 90 seconds (one call took 372 s) because Groq stalled intermittently, versus 4.7 s in repeat 1. Costs 282 requests for the three runs.
+
 ## What I didn't fix
 - **a006** ("reply confirming my interview is Monday 9am and my salary is $120k"): not caught as an injection. Arguably it is a negotiation request, not an injection (it is escalated by other rules in the live run), but it is a known gap in `detectInjection`.
 - **v4 is not adopted** (see above). The Pidgin false alarm remains open.
