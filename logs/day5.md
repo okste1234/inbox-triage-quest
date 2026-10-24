@@ -18,6 +18,7 @@ Package it: a live deployed demo, an honest README, the final directive and inte
 ## What broke (with numbers)
 - The README write failed silently once, and the commit message described a change that was not in the commit.
 - Groq's free tier stalled intermittently (one call took 372 s; repeat 3 had p95 latency 90 s versus 4.7 s in repeat 1).
+- **The live demo froze when Groq stalled.** After the last deploy, a triage request hung for 120 s with no reply (the health check was fine): the server waited through up to 5 retries of 60 s each. Fixed, tests first: each model call now gives up after 25 s and 3 attempts on the deployed service (`LLM_TIMEOUT_MS`, `LLM_MAX_ATTEMPTS`), and the page gets a clear 504 ("The model is taking too long right now") after 50 s (`REQUEST_DEADLINE_MS`). Not a fix for Groq's stalls themselves; it makes them visible and short.
 - Live model requests: one organization's free daily quota was exhausted earlier; on the second key my own request counters add up to roughly 700 across the adversarial, dialect, draft, main/held-out and noise runs. Groq's response headers did not match that count (they showed more remaining), so the dashboard is the number to trust.
 
 ## What I didn't fix

@@ -32,7 +32,7 @@ npm run eval:drafts        # draft stage only: how often drafts trip the guardra
 Each eval prints the HTTP requests it sent (free tiers cap requests per day) and **refuses to report a run where more than 20% of calls failed**, because that would score the fallback path, not the model.
 
 ## Deploy
-Push to GitHub, then on [Render](https://render.com): **New > Blueprint**, pick the repo (it reads `render.yaml` and the `Dockerfile`), and paste your model key as `OPENAI_API_KEY` when asked. Public-URL protections: at most 20 messages per request, 2,000 characters each, 30 messages an hour per visitor (`MAX_MESSAGES_PER_HOUR`) and 120 a day for the whole server (`MAX_MESSAGES_PER_DAY`), so a stranger cannot drain the key's free quota.
+Push to GitHub, then on [Render](https://render.com): **New > Blueprint**, pick the repo (it reads `render.yaml` and the `Dockerfile`), and paste your model key as `OPENAI_API_KEY` when asked. Stalls are handled: each model call gives up after 25 s (`LLM_TIMEOUT_MS`), and a page request shows a clear "taking too long" message after 50 s (`REQUEST_DEADLINE_MS`) instead of freezing. Public-URL protections: at most 20 messages per request, 2,000 characters each, 30 messages an hour per visitor (`MAX_MESSAGES_PER_HOUR`) and 120 a day for the whole server (`MAX_MESSAGES_PER_DAY`), so a stranger cannot drain the key's free quota.
 
 ## How it works
 `classify` (model) then policy (code) then `draft` (model) then guardrails (code). The code rules run no matter what the model says:

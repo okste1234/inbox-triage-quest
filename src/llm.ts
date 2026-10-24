@@ -163,6 +163,8 @@ export function makeLlmCall(env: Env = process.env): LlmCall {
     baseUrl: env.OPENAI_BASE_URL || "http://localhost:11434/v1",
     model,
     apiKey: env.OPENAI_API_KEY,
+    timeoutMs: Number(env.LLM_TIMEOUT_MS) || undefined,
+    maxAttempts: Number(env.LLM_MAX_ATTEMPTS) || undefined,
   }));
 }
 

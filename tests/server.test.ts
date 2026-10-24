@@ -90,6 +90,21 @@ describe("server", () => {
     expect((await other.json()).error).toMatch(/daily/i);
   });
 
+  it("answers 504 with a clear message when the model takes too long, instead of hanging", async () => {
+    const never: LlmCall = () => new Promise(() => {});
+    const url = await start({ llm: never, requestDeadlineMs: 80 });
+    const t0 = Date.now();
+    const res = await post(url, { messages: [{ body: "any update on my application?" }] });
+    expect(res.status).toBe(504);
+    expect((await res.json()).error).toMatch(/too long|slow/i);
+    expect(Date.now() - t0).toBeLessThan(2000);
+  });
+
+  it("does not count a timed-out request against the daily budget twice or break later requests", async () => {
+    const url = await start({ requestDeadlineMs: 5000 });
+    expect((await post(url, { messages: [{ body: "any update?" }] })).status).toBe(200);
+  });
+
   it("returns 404 for unknown routes and 405 for wrong methods", async () => {
     const url = await start();
     expect((await fetch(`${url}/nope`)).status).toBe(404);

@@ -18,3 +18,9 @@ services:
         value: "30"
       - key: MAX_MESSAGES_PER_DAY
         value: "120"   # whole server, per 24 h; keeps strangers from draining the free model quota
+      - key: LLM_TIMEOUT_MS
+        value: "25000"   # one model call: give up after 25 s (normal calls take 1-6 s) so stalls fail fast
+      - key: LLM_MAX_ATTEMPTS
+        value: "3"
+      - key: REQUEST_DEADLINE_MS
+        value: "50000"   # whole page request: show a clear message instead of freezing

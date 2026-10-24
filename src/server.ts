@@ -13,6 +13,8 @@ export interface AppDeps {
   maxMessagesPerHour?: number;
   /** Messages the whole server will triage per rolling 24 h, whoever asks. Keeps the model key's free quota safe. */
   maxMessagesPerDay?: number;
+  /** Longest a triage request may take before the visitor gets a clear 504 instead of a frozen page. */
+  requestDeadlineMs?: number;
 }
 
 const MAX_BODY_BYTES = 100_000;
@@ -121,8 +123,17 @@ export function createApp(deps: AppDeps): Server {
           subject: m.subject ?? "",
           body: m.body,
         }));
-        const { items, usage: tokens } = await triageMessages(messages, deps);
-        return send(res, 200, { items: items.map(scrub), usage: tokens });
+        const deadlineMs = deps.requestDeadlineMs ?? 60_000;
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        const timedOut = new Promise<"timeout">((resolve) => {
+          timer = setTimeout(() => resolve("timeout"), deadlineMs);
+        });
+        const outcome = await Promise.race([triageMessages(messages, deps), timedOut]);
+        clearTimeout(timer);
+        if (outcome === "timeout") {
+          return send(res, 504, { error: "The model is taking too long right now. Please try again in a minute." });
+        }
+        return send(res, 200, { items: outcome.items.map(scrub), usage: outcome.usage });
       }
       return send(res, 404, { error: "not found" });
     } catch {
