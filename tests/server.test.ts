@@ -33,7 +33,19 @@ describe("server", () => {
     const page = await fetch(url);
     expect(page.status).toBe(200);
     expect(await page.text()).toContain("<title>");
-    expect((await fetch(`${url}/healthz`)).status).toBe(200);
+    const health = await fetch(`${url}/healthz`);
+    expect(health.status).toBe(200);
+    expect(await health.json()).toMatchObject({ ok: true });
+  });
+
+  it("reports which commit is running, when the host provides it", async () => {
+    process.env.RENDER_GIT_COMMIT = "abcdef1234567890";
+    try {
+      const url = await start();
+      expect(await (await fetch(`${url}/healthz`)).json()).toEqual({ ok: true, commit: "abcdef1" });
+    } finally {
+      delete process.env.RENDER_GIT_COMMIT;
+    }
   });
 
   it("serves a small curated demo set without email addresses", async () => {

@@ -86,7 +86,10 @@ export function createApp(deps: AppDeps): Server {
     try {
       const path = (req.url ?? "/").split("?")[0];
       if (req.method === "GET" && path === "/") return send(res, 200, page, "text/html");
-      if (req.method === "GET" && path === "/healthz") return send(res, 200, { ok: true });
+      if (req.method === "GET" && path === "/healthz") {
+        const commit = process.env.RENDER_GIT_COMMIT?.slice(0, 7);
+        return send(res, 200, commit ? { ok: true, commit } : { ok: true });
+      }
       if (req.method === "GET" && path === "/api/sample") return send(res, 200, sampleMessages());
 
       if (path === "/api/triage") {
