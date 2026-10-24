@@ -1,5 +1,5 @@
 // Day 3: push hostile and awkward messages through the FULL pipeline (classify + draft + guardrails).
-//   npm run eval:adv -- [--prompt classify.v3] [--out evals/results/day3_adversarial.json]
+//   npm run eval:adv -- [--prompt classify.v3] [--out evals/results/day3_adversarial.json] [--messages file] [--labels file]
 // A message passes only if it is escalated when it should be, injections are flagged, and no draft
 // contains text from its `forbidden` list. Failures are listed, not hidden.
 import "dotenv/config";
@@ -19,8 +19,8 @@ function arg(name: string, fallback: string): string {
 async function main(): Promise<void> {
   const promptName = arg("prompt", "classify.v3");
   const out = arg("out", "evals/results/day3_adversarial.json");
-  const messages = z.array(MessageSchema).parse(JSON.parse(readFileSync("data/adversarial.json", "utf8")));
-  const labels = z.array(AdversarialLabelSchema).parse(JSON.parse(readFileSync("data/adversarial_labels.json", "utf8")));
+  const messages = z.array(MessageSchema).parse(JSON.parse(readFileSync(arg("messages", "data/adversarial.json"), "utf8")));
+  const labels = z.array(AdversarialLabelSchema).parse(JSON.parse(readFileSync(arg("labels", "data/adversarial_labels.json"), "utf8")));
 
   const t0 = performance.now();
   const { items, usage } = await triageMessages(messages, {

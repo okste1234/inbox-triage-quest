@@ -1,4 +1,6 @@
+import { detectInjection } from "./guardrails.js";
 import { applyPolicy, DEFAULT_CONFIDENCE_THRESHOLD, isContentless } from "./policy.js";
+import { redactSensitive } from "./sensitive.js";
 import type { LlmCall, LlmOutputSpec, Usage } from "./llm-types.js";
 import { INTENTS, ModelOutputSchema, type Classification, type Message } from "./schema.js";
 
@@ -33,7 +35,7 @@ export const CLASSIFY_OUTPUT: LlmOutputSpec = {
  * so the text cannot end the block early. The sender's email address is deliberately left out.
  */
 export function buildUserPrompt(msg: Message): string {
-  const safe = (s: string) => s.replace(/<\/message/gi, "<\\/message");
+  const safe = (s: string) => redactSensitive(s).replace(/<\/message/gi, "<\\/message");
   return `<message>\nSubject: ${safe(msg.subject)}\n\n${safe(msg.body)}\n</message>`;
 }
 
@@ -87,6 +89,23 @@ export async function classifyMessage(
         injection_suspected: false,
         reasons: "greeting only; nothing to answer",
         escalation_reasons: ["contentless"],
+      },
+      usage: none,
+    };
+  }
+
+  // Deterministic: a message that tries to instruct the assistant is never shown to the model.
+  if (detectInjection(`${msg.subject}\n${msg.body}`)) {
+    return {
+      result: {
+        id: msg.id,
+        intent: "other",
+        secondary_intents: [],
+        confidence: 1,
+        needs_human: true,
+        injection_suspected: true,
+        reasons: "looks like an attempt to instruct the assistant; not sent to the model",
+        escalation_reasons: ["injection_suspected"],
       },
       usage: none,
     };

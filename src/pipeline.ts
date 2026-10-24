@@ -1,5 +1,6 @@
 import { classifyMessage } from "./classify.js";
 import { draftReply } from "./draft.js";
+import { redactSensitive } from "./sensitive.js";
 import type { DraftFlag } from "./guardrails.js";
 import type { LlmCall, Usage } from "./llm-types.js";
 import type { Classification, Message } from "./schema.js";
@@ -41,11 +42,15 @@ export async function triageMessages(
       if (d.blocked) {
         classification.needs_human = true;
         classification.escalation_reasons = [...classification.escalation_reasons, "draft_blocked"];
+      } else if (!classification.needs_human && d.draft === null) {
+        // Invariant: every message ends with either a draft or a person. Nothing is dropped silently.
+        classification.needs_human = true;
+        classification.escalation_reasons = [...classification.escalation_reasons, "no_draft"];
       }
       usage.inputTokens += c.usage.inputTokens + d.usage.inputTokens;
       usage.outputTokens += c.usage.outputTokens + d.usage.outputTokens;
       items[i] = {
-        message: { id: msg.id, from_name: msg.from_name, subject: msg.subject, body: msg.body },
+        message: { id: msg.id, from_name: msg.from_name, subject: redactSensitive(msg.subject), body: redactSensitive(msg.body) },
         classification,
         draft: d.draft,
         draft_flags: d.flags,

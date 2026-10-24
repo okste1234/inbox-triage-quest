@@ -50,6 +50,37 @@ describe("triageMessages", () => {
     expect(item.classification.escalation_reasons).toContain("draft_blocked");
   });
 
+  it("never drops a message silently: an empty draft sends it to a person", async () => {
+    const llm = fake(() => cls({}), () => JSON.stringify({ draft: "" }));
+    const [item] = (await triageMessages([m("a", "x")], deps(llm))).items;
+    expect(item.draft).toBeNull();
+    expect(item.classification.needs_human).toBe(true);
+    expect(item.classification.escalation_reasons).toContain("no_draft");
+  });
+
+  it("a failed draft call also goes to a person", async () => {
+    const llm: LlmCall = async ({ output }) => {
+      if (output === CLASSIFY_OUTPUT) return { text: cls({}), stopReason: "end_turn", inputTokens: 1, outputTokens: 1 };
+      throw new Error("503");
+    };
+    const [item] = (await triageMessages([m("a", "x")], deps(llm))).items;
+    expect(item.classification.escalation_reasons).toContain("no_draft");
+  });
+
+  it("does not add no_draft on top of draft_blocked or an existing escalation", async () => {
+    const blocked = (await triageMessages([m("a", "x")], deps(fake(() => cls({}), () => JSON.stringify({ draft: "You got the job!" }))))).items[0];
+    expect(blocked.classification.escalation_reasons).toEqual(["draft_blocked"]);
+    const complaint = (await triageMessages([m("a", "x")], deps(fake(() => cls({ intent: "complaint" }), () => "{}")))).items[0];
+    expect(complaint.classification.escalation_reasons).not.toContain("no_draft");
+  });
+
+  it("redacts sensitive numbers in the message returned to the reviewer", async () => {
+    const llm = fake(() => cls({}), () => JSON.stringify({ draft: "ok" }));
+    const [item] = (await triageMessages([m("a", "SSN 123-45-6789")], deps(llm))).items;
+    expect(item.message.body).not.toContain("123-45-6789");
+    expect(item.message.body).toContain("[REDACTED SSN]");
+  });
+
   it("one failure does not sink the batch", async () => {
     const llm = fake((u) => (u.includes("BAD") ? "not json" : cls({})), () => JSON.stringify({ draft: "ok" }));
     const { items } = await triageMessages([m("a", "fine"), m("b", "BAD"), m("c", "fine")], deps(llm));

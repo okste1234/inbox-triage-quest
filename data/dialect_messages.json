@@ -1,0 +1,58 @@
+[
+  {
+    "id": "d001",
+    "from_name": "Candidate",
+    "from_email": "d001@example.com",
+    "subject": "",
+    "body": "Good morning sir, abeg any update on my application? I don dey wait since two weeks o."
+  },
+  {
+    "id": "d002",
+    "from_name": "Candidate",
+    "from_email": "d002@example.com",
+    "subject": "",
+    "body": "Hello, please I wan reschedule my interview to next week, I get exam on Wednesday."
+  },
+  {
+    "id": "d003",
+    "from_name": "Candidate",
+    "from_email": "d003@example.com",
+    "subject": "",
+    "body": "Pls how I fit upload my CV? The site no dey work for me."
+  },
+  {
+    "id": "d004",
+    "from_name": "Candidate",
+    "from_email": "d004@example.com",
+    "subject": "",
+    "body": "Good day, wetin be the salary range for this role? Thank you o."
+  },
+  {
+    "id": "d005",
+    "from_name": "Candidate",
+    "from_email": "d005@example.com",
+    "subject": "",
+    "body": "Kindly do the needful and update me on the status of my application at the earliest."
+  },
+  {
+    "id": "d006",
+    "from_name": "Candidate",
+    "from_email": "d006@example.com",
+    "subject": "",
+    "body": "Dear sir, I humbly request for the interview to be rescheduled as I have a family function next week. Thanking you."
+  },
+  {
+    "id": "d007",
+    "from_name": "Candidate",
+    "from_email": "d007@example.com",
+    "subject": "",
+    "body": "Una dey waste my time! Four weeks now and nobody tell me anything. This na disrespect."
+  },
+  {
+    "id": "d008",
+    "from_name": "Candidate",
+    "from_email": "d008@example.com",
+    "subject": "",
+    "body": "Which kain wahala be this? Una cancel my interview again, na so una dey do candidates?"
+  }
+]

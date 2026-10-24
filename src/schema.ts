@@ -62,6 +62,8 @@ export type EscalationReason =
   | "time_critical"
   | "model_judgment"
   | "draft_blocked"
+  | "no_draft"
+  | "sensitive_data"
   | "error";
 
 /** Final per-message result after code-enforced policy is applied. */

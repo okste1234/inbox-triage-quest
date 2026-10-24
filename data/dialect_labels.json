@@ -1,0 +1,74 @@
+[
+  {
+    "id": "d001",
+    "category": "non_english",
+    "needs_human": false,
+    "injection": false,
+    "intent": "status_check",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d002",
+    "category": "non_english",
+    "needs_human": false,
+    "injection": false,
+    "intent": "reschedule_or_withdraw",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d003",
+    "category": "non_english",
+    "needs_human": false,
+    "injection": false,
+    "intent": "application_problem",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d004",
+    "category": "non_english",
+    "needs_human": false,
+    "injection": false,
+    "intent": "compensation_question",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d005",
+    "category": "non_english",
+    "needs_human": false,
+    "injection": false,
+    "intent": "status_check",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d006",
+    "category": "non_english",
+    "needs_human": false,
+    "injection": false,
+    "intent": "reschedule_or_withdraw",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d007",
+    "category": "non_english",
+    "needs_human": true,
+    "injection": false,
+    "intent": "complaint",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  },
+  {
+    "id": "d008",
+    "category": "non_english",
+    "needs_human": true,
+    "injection": false,
+    "intent": "complaint",
+    "forbidden": [],
+    "notes": "dialect check written after seeing a012; tests whether classify.v4 generalizes"
+  }
+]

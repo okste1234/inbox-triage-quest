@@ -1,3 +1,4 @@
+import { findSensitive } from "./sensitive.js";
 import type { EscalationReason, ModelOutput } from "./schema.js";
 
 export const DEFAULT_CONFIDENCE_THRESHOLD = 0.7;
@@ -20,6 +21,7 @@ export function applyPolicy(
   if (output.confidence < threshold) reasons.push("low_confidence");
   if (body.trim() === "") reasons.push("blank");
   if (isTimeCritical(body)) reasons.push("time_critical");
+  if (findSensitive(body).length > 0) reasons.push("sensitive_data");
   if (output.needs_human) reasons.push("model_judgment");
 
   return { needs_human: reasons.length > 0, escalation_reasons: reasons };
