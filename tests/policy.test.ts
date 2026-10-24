@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyPolicy, isContentless } from "../src/policy.js";
+import { applyPolicy, isContentless, isTimeCritical } from "../src/policy.js";
 import type { ModelOutput } from "../src/schema.js";
 
 const base: ModelOutput = {
@@ -65,5 +65,39 @@ describe("isContentless", () => {
   });
   it("is false for an empty string (blank is handled separately)", () => {
     expect(isContentless("")).toBe(false);
+  });
+});
+
+describe("isTimeCritical", () => {
+  it("catches messages that need action within hours", () => {
+    for (const t of [
+      "I'm running about 15 min late, traffic is terrible",
+      "my train got cancelled and I'll only reach the office around 2:30",
+      "I can't make the 3pm today",
+      "I'll be joining the call in 5 minutes from my phone",
+      "I can't do the video call this morning",
+      "Please advise ASAP",
+      "my internet is down right now",
+      "I am late for the interview",
+    ])
+      expect(isTimeCritical(t), t).toBe(true);
+  });
+  it("leaves ordinary scheduling and status messages alone", () => {
+    for (const t of [
+      "I'm available next Tuesday or Wednesday afternoon for the second interview",
+      "Any update on my application?",
+      "Can we reschedule to later in the month?",
+      "I applied three weeks ago and have not heard back",
+      "What is the salary range for this role?",
+    ])
+      expect(isTimeCritical(t), t).toBe(false);
+  });
+});
+
+describe("applyPolicy: time critical", () => {
+  it("escalates urgent messages even when the model says no", () => {
+    const r = applyPolicy(base, "I'm running late to my interview");
+    expect(r.escalation_reasons).toContain("time_critical");
+    expect(r.needs_human).toBe(true);
   });
 });

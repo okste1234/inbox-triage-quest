@@ -19,6 +19,7 @@ export function applyPolicy(
   if (output.injection_suspected) reasons.push("injection_suspected");
   if (output.confidence < threshold) reasons.push("low_confidence");
   if (body.trim() === "") reasons.push("blank");
+  if (isTimeCritical(body)) reasons.push("time_critical");
   if (output.needs_human) reasons.push("model_judgment");
 
   return { needs_human: reasons.length > 0, escalation_reasons: reasons };
@@ -30,4 +31,15 @@ const GREETING_WORDS = new Set(["hi", "hello", "hey", "hiya", "good", "morning",
 export function isContentless(body: string): boolean {
   const words = body.toLowerCase().replace(/[^a-z\s]/g, " ").split(/\s+/).filter(Boolean);
   return words.length > 0 && words.length <= 4 && words.every((w) => GREETING_WORDS.has(w));
+}
+
+const URGENT =
+  /\b(running (?:\w+ )*late|(?:am|i'm|be|will be) late|late (?:for|to)|asap|as soon as (?:you can|possible)|right now|this (?:morning|afternoon|evening)|tonight|today|in \d+ (?:min|minutes|mins|hours?)|cancel(?:l)?ed)\b/i;
+
+/**
+ * Words that mean a person has to act within hours (directive.md rule 4). The model misses these when
+ * they are phrased in a way it was not tuned on, and a false alarm only costs a reviewer a glance.
+ */
+export function isTimeCritical(body: string): boolean {
+  return URGENT.test(body);
 }
